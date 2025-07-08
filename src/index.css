@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "daisyui"{
+    themes: light --default;}
+
+.input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-400 focus:outline-none transition;
+}
