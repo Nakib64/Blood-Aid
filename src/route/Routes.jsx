@@ -10,6 +10,8 @@ import Profile from '../DashBoard/Profile';
 import CreateDonationRequest from '../DashBoard/CreateDonationRequest';
 import Welcome from '../DashBoard/Welcome';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
+import MyDonationRequests from '../DashBoard/MyDonationRequests';
+import PendingDonationRequests from '../DonationRequests/DonationRequests';
 
 
 const Routes = createBrowserRouter([
@@ -20,6 +22,10 @@ const Routes = createBrowserRouter([
             {
                 index: true,
                 Component: Home
+            },
+            {
+                path: '/donationRequests',
+                Component: PendingDonationRequests
             }
         ]
     },
@@ -52,6 +58,10 @@ const Routes = createBrowserRouter([
             {
                 path:'/dashboard/createDonationRequest',
                 Component: CreateDonationRequest
+            },
+            {
+                path: '/dashboard/myDonationRequests',
+                Component: MyDonationRequests
             }
         ]
     }

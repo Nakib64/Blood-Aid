@@ -10,17 +10,20 @@ import { Slide, toast } from "react-toastify";
 export default function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
 	const { login } = useContext(authContext);
+	const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 	  const location = useLocation()
 
 
 
 	const handleSubmit = (e) => {
+		setLoading(true)
 		e.preventDefault();
 		const email = e.target.email.value;
 		const password = e.target.password.value;
 		login(email, password)
 			.then(() => {
+				setLoading(false)
 				 navigate(location.state? `${location.state}`:'/')
 				toast.success(
 					<span className="flex items-center gap-2">
@@ -35,6 +38,7 @@ export default function LoginPage() {
 				);
 			})
 			.catch((error) => {
+				setLoading(false)
 				toast.error(
 					<span className="flex items-center gap-2">
 						<FiCheckCircle className="text-xl" />
@@ -93,8 +97,10 @@ export default function LoginPage() {
 
 						<button
 							type="submit"
-							className="w-full py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition"
+							className="w-full py-2 flex justify-center items-center gap-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition"
 						>
+							{loading && <span className="loading loading-spinner loading-md"></span>
+}
 							Login
 						</button>
 					</form>

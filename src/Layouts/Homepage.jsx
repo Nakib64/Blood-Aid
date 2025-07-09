@@ -1,20 +1,26 @@
-import React from 'react';
-import { Outlet } from 'react-router';
-import { ToastContainer } from 'react-toastify';
+import React from "react";
+import { Outlet } from "react-router";
+import { ToastContainer } from "react-toastify";
+import Navbar from "../Homepage/Navbar/Navbar";
+import Footer from "../Homepage/Footer/Footer";
 
 const Homepage = () => {
-    return (
-        <div>
-              <ToastContainer
-        position="top-center"
-        theme="colored"
-        autoClose={3000}
-        newestOnTop
-        pauseOnFocusLoss={false}
-      />
-            <Outlet></Outlet>
-        </div>
-    );
+	return (
+		<div className="min-h-screen">
+			<ToastContainer
+				position="top-center"
+				theme="colored"
+				autoClose={3000}
+				newestOnTop
+				pauseOnFocusLoss={false}
+			/>
+			<Navbar></Navbar>
+			<main>
+				<Outlet></Outlet>
+			</main>
+			<Footer></Footer>
+		</div>
+	);
 };
 
 export default Homepage;

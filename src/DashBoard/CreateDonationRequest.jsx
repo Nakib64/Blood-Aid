@@ -6,12 +6,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
+import Loading from "../Loading/Loading";
 
 export default function CreateDonationRequest() {
   const { user } = useContext(authContext);
   const navigate = useNavigate();
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
+  const [loading, setLoading] = useState(false)
   const {
     register,
     handleSubmit,
@@ -33,11 +35,7 @@ export default function CreateDonationRequest() {
   }, [selectedDistrict, districts, setValue]);
 
   const onSubmit = async (data) => {
-    if (user.status === "blocked") {
-      toast.error("Blocked users cannot create donation requests.");
-      return;
-    }
-
+    setLoading(true)
     const donationRequest = {
       requesterName: user.displayName,
       requesterEmail: user.email,
@@ -49,13 +47,18 @@ export default function CreateDonationRequest() {
       bloodGroup: data.bloodGroup,
       donationDate: data.date,
       donationTime: data.time,
+      contactNumber: data.number,
       requestMessage: data.message,
       status: "pending",
     };
 
     console.log("Donation Request Submitted:", donationRequest);
-    toast.success("Donation request submitted!");
+    axios.post('http://localhost:3000/createDonation', donationRequest).then(()=>{
+      setLoading(false)
+toast.success("Donation request submitted!");
     navigate("/dashboard");
+    })
+    
   };
 
   return (
@@ -128,6 +131,10 @@ export default function CreateDonationRequest() {
           <label className="font-medium mb-1">Donation Time</label>
           <input type="time" {...register("time", { required: true })} className="input" />
         </div>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1">Contact Number: </label>
+          <input type="number" {...register("number", { required: true })} className="input" />
+        </div>
 
         <div className="flex flex-col md:col-span-2">
           <label className="font-medium mb-1">Request Message</label>
@@ -135,7 +142,8 @@ export default function CreateDonationRequest() {
         </div>
 
         <div className="md:col-span-2">
-          <button type="submit" className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 font-semibold transition">
+          <button type="submit" className="w-full bg-red-600 text-white py-2 flex gap-2 justify-center items-center rounded hover:bg-red-700 font-semibold transition">
+            {loading && <span className="loading loading-spinner loading-md"></span>}
             Request Donation
           </button>
         </div>
