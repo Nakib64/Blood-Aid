@@ -12,6 +12,8 @@ import Welcome from '../DashBoard/Welcome';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import MyDonationRequests from '../DashBoard/MyDonationRequests';
 import PendingDonationRequests from '../DonationRequests/DonationRequests';
+import DonationRequestDetails from '../DonationRequests/DonationDetails.';
+import MyDonations from '../DashBoard/MyDonations';
 
 
 const Routes = createBrowserRouter([
@@ -26,6 +28,10 @@ const Routes = createBrowserRouter([
             {
                 path: '/donationRequests',
                 Component: PendingDonationRequests
+            },
+            {
+                path:`/donationRequests/:id`,
+                element: <PrivateRoute><DonationRequestDetails></DonationRequestDetails></PrivateRoute>
             }
         ]
     },
@@ -62,6 +68,10 @@ const Routes = createBrowserRouter([
             {
                 path: '/dashboard/myDonationRequests',
                 Component: MyDonationRequests
+            }, 
+            {
+                path: '/dashboard/myDonations',
+                Component: MyDonations
             }
         ]
     }

@@ -29,6 +29,7 @@ export function DashboardLayout() {
     { to: "/dashboard/profile", label: "Profile", icon: <UserCircle size={18} /> },
     { to: "/dashboard/myDonationRequests", label: "My Donation Requests", icon: <Droplets size={18} /> },
     { to: "/dashboard/createDonationRequest", label: "Create Request", icon: <PlusCircle size={18} /> },
+    { to: "/dashboard/myDonations", label: "My Donations", icon: <PlusCircle size={18} /> },
   ];
 
   return (

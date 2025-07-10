@@ -97,7 +97,7 @@ export default function MyDonationRequests() {
                 requests.map((req) => (
                   <motion.tr
                     key={req._id}
-                    whileHover={{ scale: 1.01 }}
+        
                     className="transition duration-300 even:bg-gray-50 hover:bg-red-50"
                   >
                     <td className="py-3 px-4 font-medium">{req.recipientName}</td>
@@ -142,14 +142,7 @@ export default function MyDonationRequests() {
                           </div>
                         </>
                       )}
-                      {req.status !== "inprogress" && (
-                        <button
-                          onClick={() => navigate(`/donation-requests/${req._id}`)}
-                          className="block sm:inline-block w-full sm:w-auto text-xs sm:text-sm bg-gray-600 text-white rounded-md px-2 py-1 hover:bg-gray-700"
-                        >
-                          View
-                        </button>
-                      )}
+                    
                     </td>
                   </motion.tr>
                 ))

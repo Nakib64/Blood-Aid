@@ -6,7 +6,7 @@ import Footer from "../Homepage/Footer/Footer";
 
 const Homepage = () => {
 	return (
-		<div className="min-h-screen">
+		<div className="min-h-screen flex flex-col">
 			<ToastContainer
 				position="top-center"
 				theme="colored"
@@ -15,7 +15,7 @@ const Homepage = () => {
 				pauseOnFocusLoss={false}
 			/>
 			<Navbar></Navbar>
-			<main>
+			<main className="flex-1">
 				<Outlet></Outlet>
 			</main>
 			<Footer></Footer>

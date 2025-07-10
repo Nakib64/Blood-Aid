@@ -38,10 +38,10 @@ const Navbar = () => {
 	return (
 	
 			<nav className="bg-red-800 text-white shadow sticky top-0 z-50">
-				<div className="container mx-auto px-4 py-3 flex items-center justify-between">
+				<div className=" mx-auto px-4 py-2 flex items-center justify-between">
 					{/* Logo */}
 					<Link to="/" className="text-2xl font-bold  flex gap-1 items-center">
-						<img src={logo} alt="logo" className="h-10 w-10" /> BloodAid
+						<img src={logo} alt="logo" className="h-12 w-12" /> BloodAid
 					</Link>
 
 					<div className="hidden md:flex gap-6 justify-end ">
@@ -58,7 +58,7 @@ const Navbar = () => {
 										<img
 											src={user.photoURL || "/default-avatar.png"}
 											alt="avatar"
-											className="w-9 h-9 rounded-full border cursor-pointer"
+											className="w-12 h-12 rounded-full border cursor-pointer"
 										/>
 									</button>
 								</Link>
