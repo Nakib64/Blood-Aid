@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { motion } from "framer-motion";
 import { authContext } from '../Authentication/AuthContext';
+import RecentMyDonations from './Recent';
 const Welcome = () => {
 
     const { user } = useContext(authContext);
@@ -21,6 +22,8 @@ const Welcome = () => {
             className="w-20 md:w-28 drop-shadow rounded-full"
           />
         </div>
+              <RecentMyDonations></RecentMyDonations>
+
       </motion.div>
     );
 };
