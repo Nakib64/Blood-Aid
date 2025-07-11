@@ -98,7 +98,7 @@ export default function AllDonationRequests() {
                   <motion.tr
                     key={req._id}
         
-                    className="transition duration-300 even:bg-gray-50 hover:bg-red-50 shadow-sm shadow-gray-500 hover:shadow-md"
+                    className="transition duration-300  hover:bg-red-50  shadow-gray-500 hover:shadow-md"
                   >
                     <td className="py-3 px-4 font-medium">{req.recipientName}</td>
                     <td className="py-3 px-4">

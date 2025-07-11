@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MoreVertical, ShieldCheck, UserCheck, UserX } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -8,6 +8,8 @@ import SmartDropdown from "./SmartDropdown";
 
 const pageSize = 10;
 import { User, Users, Crown } from "lucide-react";
+import { authContext } from "../Authentication/AuthContext";
+import { useLocation, useNavigate } from "react-router";
 
 const getRoleTag = (role) => {
 	switch (role) {
@@ -43,6 +45,40 @@ export default function AllUsers() {
 	const [searchEmail, setSearchEmail] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const queryClient = useQueryClient();
+	const { user, loading } = useContext(authContext);
+	const [role, setRole] = useState(null);
+	const [checking, setChecking] = useState(true); // local loading for role check
+	const location = useLocation();
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		const fetchRole = async () => {
+			if (user?.email) {
+				try {
+					const res = await axios.get(`http://localhost:3000/users?email=${user.email}`);
+					setRole(res.data.role);
+				} catch (err) {
+					console.error("Failed to fetch role", err);
+				} finally {
+					setChecking(false);
+				}
+			} else {
+				setChecking(false);
+			}
+		};
+
+		fetchRole();
+	}, [user,location.pathname]);
+
+	// Global auth loading or role checking in progress
+	if (loading || checking) {
+		return <Loading />;
+	}
+
+	if (role !== "admin") {
+		navigate('/forbidden')
+	}
+
 
 	// Fetch users with pagination, filter, and search
 	const fetchUsers = async () => {
@@ -68,6 +104,7 @@ export default function AllUsers() {
 			axios.patch(`http://localhost:3000/users/${userId}`, { action }),
 		onSuccess: () => {
 			queryClient.invalidateQueries(["users"]);
+			window.location.reload()
 		},
 	});
 

@@ -50,7 +50,7 @@ const Welcome = () => {
 				<img
 					src={user.photoURL}
 					alt="donate"
-					className="w-20 md:w-28 drop-shadow rounded-full"
+					className="w-20 md:w-28 h-20 md:h-28 drop-shadow rounded-full"
 				/>
 			</div>
       {role !== "donor" && <AdminDashboard></AdminDashboard>}

@@ -20,6 +20,9 @@ import AllUsers from "../AdminDashBoard/ManageUsers";
 import AllDonationRequests from "../AdminDashBoard/AllDonationRequests";
 import AddBlog from "../AddBlog/AddBlog";
 import ContentManagement from "../AdminDashBoard/ManageContents";
+import Forbidden from "../Forbidden/Forbidden";
+import AdminRoute from "../AdminDashBoard/AdminRoute";
+import PublishedBlogs from "../Blogs/Blogs";
 
 const Routes = createBrowserRouter([
 	{
@@ -50,6 +53,10 @@ const Routes = createBrowserRouter([
 				path: "/donor/:id",
 				Component: DonorCard,
 			},
+            {
+                path:"/blogs",
+                Component: PublishedBlogs
+            }
 		],
 	},
 	{
@@ -96,22 +103,26 @@ const Routes = createBrowserRouter([
 			},
 			{
 				path: "/dashboard/all-users",
-				Component: AllUsers,
+                element: <AdminRoute><AllUsers></AllUsers></AdminRoute>
 			},
 			{
 				path: "/dashboard/all-blood-donation-request",
-				Component: AllDonationRequests,
+                element: <AdminRoute><AllDonationRequests></AllDonationRequests></AdminRoute>
 			},
 			{
 				path: "/dashboard/content-management/add-blog",
-				Component: AddBlog,
+                element: <AdminRoute><AddBlog></AddBlog></AdminRoute>
 			},
             {
                 path: "/dashboard/content-management",
-                Component: ContentManagement
+                element: <AdminRoute><ContentManagement></ContentManagement></AdminRoute>
             }
 		],
 	},
+    {
+        path: "forbidden",
+        Component: Forbidden
+    }
 ]);
 
 export default Routes;

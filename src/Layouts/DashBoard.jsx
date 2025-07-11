@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { authContext } from "../Authentication/AuthContext";
-
 import {
 	LayoutDashboard,
 	UserCircle,
@@ -11,96 +10,62 @@ import {
 	X,
 	LogOut,
 	Users,
-	Database,
 	DollarSign,
 	HeartPulse,
 	SquareDashedKanban,
 } from "lucide-react";
 import logo from "../assets/pngegg.png";
-
 import { ToastContainer } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export function DashboardLayout() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const location = useLocation();
 	const { logout, user } = useContext(authContext);
-	const [role, setRole] = useState(null);
 	const [links, setLinks] = useState([]);
 	const navigate = useNavigate();
 
+	// Fetch user role using React Query
+	const { data: role } = useQuery({
+		queryKey: ["user-role", user?.email],
+		queryFn: async () => {
+			if (!user?.email) return null;
+			const res = await axios.get(`http://localhost:3000/users?email=${user.email}`);
+			return res.data.role;
+		},
+		enabled: !!user?.email, // only run if user exists
+		refetchInterval: 5000, // refetch role every 5 seconds to auto-update if changed
+		refetchOnWindowFocus: true, // optional: refetch on tab focus
+	});
+
 	useEffect(() => {
-		const fetchRoleAndLinks = async () => {
-			if (!user?.email) return;
-			try {
-				const res = await axios.get(
-					`http://localhost:3000/users?email=${user.email}`
-				);
-				const userRole = res.data.role;
+		if (!role) return;
 
-				if (userRole !== role) {
-					setRole(userRole);
-					if (userRole === "donor") {
-						setLinks([
-							{
-								to: "/dashboard",
-								label: "Overview",
-								icon: <LayoutDashboard size={18} />,
-							},
-							{
-								to: "/dashboard/profile",
-								label: "Profile",
-								icon: <UserCircle size={18} />,
-							},
-							{
-								to: "/dashboard/my-donation-requests",
-								label: "My Donation Requests",
-								icon: <Droplets size={18} />,
-							},
-							{
-								to: "/dashboard/create-donation-request",
-								label: "Create Request",
-								icon: <PlusCircle size={18} />,
-							},
-							{
-								to: "/dashboard/myDonations",
-								label: "My Donations",
-								icon: <PlusCircle size={18} />,
-							},
-						]);
-					} else {
-						// Default to admin and volanteers
-						setLinks([
-							{
-								to: "/dashboard",
-								label: "Dashboard",
-								icon: <LayoutDashboard size={18} />,
-							},
-							{
-								to: "/dashboard/all-users",
-								label: "Manage Users",
-								icon: <Users size={18} />,
-							},
-							{
-								to: "/dashboard/all-blood-donation-request",
-								label: "All Donation Requests",
-								icon: <HeartPulse size={18} />,
-							},
-							{
-								to: "/dashboard/content-management",
-								label: "Manage Contents",
-								icon: <SquareDashedKanban size={18} />,
-							},
-						]);
-					}
-				}
-			} catch (error) {
-				console.error("Error fetching role:", error);
-			}
-		};
-
-		fetchRoleAndLinks();
-	}, [user, role]);
+		if (role === "donor") {
+			setLinks([
+				{ to: "/dashboard", label: "Overview", icon: <LayoutDashboard size={18} /> },
+				{ to: "/dashboard/profile", label: "Profile", icon: <UserCircle size={18} /> },
+				{ to: "/dashboard/my-donation-requests", label: "My Donation Requests", icon: <Droplets size={18} /> },
+				{ to: "/dashboard/create-donation-request", label: "Create Request", icon: <PlusCircle size={18} /> },
+				{ to: "/dashboard/myDonations", label: "My Donations", icon: <DollarSign size={18} /> },
+			]);
+		} else if(role === "admin") {
+			setLinks([
+				{ to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+				{ to: "/dashboard/all-users", label: "Manage Users", icon: <Users size={18} /> },
+				{ to: "/dashboard/all-blood-donation-request", label: "All Donation Requests", icon: <HeartPulse size={18} /> },
+				{ to: "/dashboard/content-management", label: "Manage Contents", icon: <SquareDashedKanban size={18} /> },
+			]);
+		}else{
+			setLinks([
+				{ to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+		
+				{ to: "/dashboard/all-blood-donation-request", label: "All Donation Requests", icon: <HeartPulse size={18} /> },
+				{ to: "/dashboard/content-management", label: "Manage Contents", icon: <SquareDashedKanban size={18} /> },
+			]);
+		}
+	}, [role]);
 
 	return (
 		<div className="flex min-h-screen bg-gray-100">
