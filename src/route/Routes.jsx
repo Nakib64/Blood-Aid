@@ -23,6 +23,8 @@ import ContentManagement from "../AdminDashBoard/ManageContents";
 import Forbidden from "../Forbidden/Forbidden";
 import AdminRoute from "../AdminDashBoard/AdminRoute";
 import PublishedBlogs from "../Blogs/Blogs";
+import EditBlog from "../AddBlog/EditBlog";
+
 
 const Routes = createBrowserRouter([
 	{
@@ -116,7 +118,13 @@ const Routes = createBrowserRouter([
             {
                 path: "/dashboard/content-management",
                 element: <AdminRoute><ContentManagement></ContentManagement></AdminRoute>
-            }
+            },
+			{
+				path: '/dashboard/blog/:id',
+				element:<AdminRoute><EditBlog></EditBlog></AdminRoute>
+				
+				
+			}
 		],
 	},
     {

@@ -1,76 +1,75 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 import JoditEditor from "jodit-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-export default function AddBlog() {
+export default function EditBlog() {
+	const { id } = useParams();
+	const navigate = useNavigate();
 	const editor = useRef(null);
-	const [title, setTitle] = useState("");
-	const [thumbnail, setThumbnail] = useState(null);
-	const [preview, setPreview] = useState(null);
-	const [content, setContent] = useState("");
 
+	const [content, setContent] = useState("");
+	const [preview, setPreview] = useState("");
 	const [uploading, setUploading] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 
-	const imageBBApiKey = import.meta.env.VITE_IMGBB_KEY;
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		formState: { errors },
+	} = useForm();
 
-	const handleImageSelect = (e) => {
+	// Load blog data
+	useEffect(() => {
+		axios.get(`http://localhost:3000/blog/${id}`).then((res) => {
+			const blog = res.data;
+			setValue("title", blog.title);
+			setContent(blog.content);
+			setPreview(blog.thumbnail);
+		});
+	}, [id, setValue]);
+
+	// Handle file change
+	const handleImagePreview = (e) => {
 		const file = e.target.files[0];
-		setThumbnail(file);
-		if (file) setPreview(URL.createObjectURL(file));
-	};
-
-	const handleImageUpload = async () => {
-		if (!thumbnail) return null;
-		const formData = new FormData();
-		formData.append("image", thumbnail);
-		formData.append("key", imageBBApiKey);
-
-		try {
-			setUploading(true);
-			const { data } = await axios.post("https://api.imgbb.com/1/upload", formData);
-			return data.data.url;
-		} catch (error) {
-			console.error("Image upload failed", error);
-			toast.error("Image upload failed");
-			return null;
-		} finally {
-			setUploading(false);
+		if (file) {
+			setPreview(URL.createObjectURL(file));
 		}
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		if (!title || !content || !thumbnail) {
-			toast.warning("Please fill in all fields.");
-			return;
-		}
-
+	const onSubmit = async (data) => {
 		try {
 			setSubmitting(true);
-			const thumbnailUrl = await handleImageUpload();
-			if (!thumbnailUrl) return;
+			let imageUrl = preview;
 
-			const newBlog = {
-				title,
+			// If new image is selected
+			if (data.thumbnail[0]) {
+				setUploading(true);
+				const formData = new FormData();
+				formData.append("image", data.thumbnail[0]);
+
+				const imgRes = await axios.post(
+					`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_KEY}`,
+					formData
+				);
+				imageUrl = imgRes.data.data.url;
+				setUploading(false);
+			}
+
+			await axios.patch(`http://localhost:3000/blog/${id}`, {
+				title: data.title,
+				thumbnail: imageUrl,
 				content,
-				thumbnail: thumbnailUrl,
-				status: "draft",
-				createdAt: new Date(),
-			};
+			});
 
-			await axios.post("http://localhost:3000/blogs", newBlog);
-			toast.success("Blog created as draft!");
-
-			setTitle("");
-			setContent("");
-			setThumbnail(null);
-			setPreview(null);
-		} catch (err) {
-			console.error(err);
-			toast.error("Failed to create blog.");
+			toast.success("Blog updated successfully!");
+			navigate("/dashboard/content-management");
+		} catch (error) {
+			toast.error("Failed to update blog");
 		} finally {
 			setSubmitting(false);
 		}
@@ -84,36 +83,36 @@ export default function AddBlog() {
 				transition={{ duration: 0.4 }}
 				className="text-3xl font-bold text-center text-neutral mb-8"
 			>
-				📝 Create a New Blog
+				✏️ Edit Blog
 			</motion.h2>
 
 			<motion.form
-				onSubmit={handleSubmit}
+				onSubmit={handleSubmit(onSubmit)}
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				transition={{ duration: 0.5 }}
 				className="space-y-8 bg-base-200 p-6 rounded-xl shadow-md"
 			>
-				{/* Title Field */}
+				{/* Title */}
 				<div>
 					<label className="label font-semibold">Blog Title</label>
 					<input
 						type="text"
 						className="input input-bordered w-full text-base"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						placeholder="e.g., The Importance of Blood Donation"
+						{...register("title", { required: true })}
 					/>
+					{errors.title && <p className="text-red-500 text-sm">Title is required.</p>}
 				</div>
 
-				{/* Thumbnail Upload + Preview */}
+				{/* Thumbnail */}
 				<div>
 					<label className="label font-semibold">Thumbnail Image</label>
 					<input
 						type="file"
 						accept="image/*"
 						className="file-input file-input-bordered w-full"
-						onChange={handleImageSelect}
+						{...register("thumbnail")}
+						onChange={handleImagePreview}
 					/>
 					{preview && (
 						<div className="mt-3">
@@ -127,7 +126,7 @@ export default function AddBlog() {
 					)}
 				</div>
 
-				{/* Rich Text Editor */}
+				{/* Editor */}
 				<div>
 					<label className="label font-semibold">Blog Content</label>
 					<div className="rounded-md overflow-hidden border border-base-300">
@@ -139,21 +138,21 @@ export default function AddBlog() {
 							config={{
 								statusbar: false,
 								readonly: false,
-								placeholder: "Write your blog content here...",
+								placeholder: "Edit your blog content here...",
 								height: 400,
 							}}
 						/>
 					</div>
 				</div>
 
-				{/* Submit Button */}
+				{/* Button */}
 				<div className="text-right">
 					<button
 						type="submit"
 						className={`btn btn-primary px-6 ${uploading || submitting ? "btn-disabled opacity-60" : ""}`}
 						disabled={uploading || submitting}
 					>
-						{uploading || submitting ? "Saving..." : "Create Blog"}
+						{uploading || submitting ? "Updating..." : "Update Blog"}
 					</button>
 				</div>
 			</motion.form>

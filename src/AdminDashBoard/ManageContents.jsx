@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
@@ -146,7 +146,7 @@ export default function ContentManagement() {
 									<h3 className="text-lg font-semibold text-base-content min-h-[48px]">
 										{blog.title}
 									</h3>
-									
+
 									<span
 										className={`badge w-fit px-3 text-xs mt-1 ${
 											blog.status === "published" ? "badge-success" : "badge-warning"
@@ -159,14 +159,11 @@ export default function ContentManagement() {
 								{/* Action Buttons */}
 								<div className="p-4 flex flex-wrap justify-between items-center gap-2">
 									{(userRole === "admin" || userRole === "volunteer") && (
-										<button
-											className="btn btn-sm btn-outline hover:btn-info transition-all"
-											onClick={() =>
-												navigate(`/dashboard/content-management/edit/${blog._id}`)
-											}
-										>
-											<Pencil size={14} /> Edit
-										</button>
+										<Link to={`/dashboard/blog/${blog._id}`}>
+											<button className="btn btn-sm btn-outline hover:btn-info transition-all">
+											edit	
+											</button>
+										</Link>
 									)}
 
 									{userRole === "admin" && (
