@@ -10,27 +10,38 @@ import { authContext } from "../Authentication/AuthContext";
 
 export default function ContentManagement() {
 	const [filter, setFilter] = useState("all");
-    const [userRole, setUserRole] = useState(null)
+	const [userRole, setUserRole] = useState(null);
+	const [page, setPage] = useState(1);
+	const limit = 6;
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const { user } = useContext(authContext);
 
-    useEffect(()=>{
-        axios.get(`http://localhost:3000/users?email=${user.email}`).then(res=>{
-            setUserRole(res.data.role)
-        })
-    })
+	// Get role of current user
+	useEffect(() => {
+		if (user?.email) {
+			axios.get(`http://localhost:3000/users?email=${user.email}`).then((res) => {
+				setUserRole(res.data.role);
+			});
+		}
+	}, [user]);
 
-
-	const { data: blogs = [], isLoading } = useQuery({
-		queryKey: ["blogs", filter],
+	const { data, isLoading } = useQuery({
+		queryKey: ["blogs", filter, page],
 		queryFn: async () => {
 			const res = await axios.get("http://localhost:3000/blogs", {
-				params: filter !== "all" ? { status: filter } : {},
+				params: {
+					status: filter !== "all" ? filter : undefined,
+					page,
+					limit,
+				},
 			});
 			return res.data;
 		},
 	});
+
+	const blogs = data?.blog || [];
+	const totalPages = data?.totalPages || 1;
 
 	const mutation = useMutation({
 		mutationFn: ({ id, action }) =>
@@ -54,21 +65,21 @@ export default function ContentManagement() {
 
 	const handleDelete = (id) => {
 		Swal.fire({
-			title: 'Are you sure?',
+			title: "Are you sure?",
 			text: "You won't be able to revert this!",
-			icon: 'warning',
+			icon: "warning",
 			showCancelButton: true,
-			confirmButtonColor: '#e11d48',
-			cancelButtonColor: '#6b7280',
-			confirmButtonText: 'Yes, delete it!',
-			background: '#fff',
+			confirmButtonColor: "#e11d48",
+			cancelButtonColor: "#6b7280",
+			confirmButtonText: "Yes, delete it!",
+			background: "#fff",
 		}).then((result) => {
 			if (result.isConfirmed) {
 				deleteMutation.mutate(id);
 				Swal.fire({
-					title: 'Deleted!',
-					text: 'The blog has been deleted.',
-					icon: 'success',
+					title: "Deleted!",
+					text: "The blog has been deleted.",
+					icon: "success",
 					timer: 1500,
 					showConfirmButton: false,
 				});
@@ -78,12 +89,16 @@ export default function ContentManagement() {
 
 	return (
 		<div className="p-6">
+			{/* Header */}
 			<div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
 				<h2 className="text-3xl font-bold text-neutral">📝 Content Management</h2>
 				<div className="flex items-center gap-3 w-full md:w-auto">
 					<select
 						value={filter}
-						onChange={(e) => setFilter(e.target.value)}
+						onChange={(e) => {
+							setPage(1);
+							setFilter(e.target.value);
+						}}
 						className="select select-bordered text-sm"
 					>
 						<option value="all">All Blogs</option>
@@ -101,6 +116,7 @@ export default function ContentManagement() {
 				</div>
 			</div>
 
+			{/* Blog Grid */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 				{isLoading ? (
 					<p className="text-center col-span-full">Loading blogs...</p>
@@ -113,65 +129,71 @@ export default function ContentManagement() {
 							initial={{ opacity: 0, y: 30 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ delay: index * 0.05, duration: 0.4, type: "spring" }}
-							className="rounded-xl border border-base-300 shadow-md bg-base-100 hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden"
+							className="rounded-xl border border-base-300 shadow-lg bg-base-100 hover:shadow-2xl transition duration-300 overflow-hidden flex"
 						>
-							<div className="h-48 w-full overflow-hidden">
-								<img
-									src={blog.thumbnail}
-									alt="Thumbnail"
-									className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-								/>
-							</div>
+							<div className="grid grid-rows-[auto_1fr_auto] h-full w-full">
+								{/* Thumbnail */}
+								<div className="h-48 w-full overflow-hidden">
+									<img
+										src={blog.thumbnail}
+										alt="Thumbnail"
+										className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+									/>
+								</div>
 
-							<div className="p-4 flex flex-col gap-2 flex-1">
-								<h3 className="text-lg font-semibold line-clamp-2 text-base-content">
-									{blog.title}
-								</h3>
-								<p className="text-sm text-gray-500 line-clamp-3">{blog.description}</p>
+								{/* Content */}
+								<div className="p-4 flex flex-col gap-2">
+									<h3 className="text-lg font-semibold text-base-content min-h-[48px]">
+										{blog.title}
+									</h3>
+									
+									<span
+										className={`badge w-fit px-3 text-xs mt-1 ${
+											blog.status === "published" ? "badge-success" : "badge-warning"
+										}`}
+									>
+										{blog.status}
+									</span>
+								</div>
 
-								<span
-									className={`badge w-fit px-3 text-xs mt-1 ${
-										blog.status === "published" ? "badge-success" : "badge-warning"
-									}`}
-								>
-									{blog.status}
-								</span>
-
-								<div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
+								{/* Action Buttons */}
+								<div className="p-4 flex flex-wrap justify-between items-center gap-2">
 									{(userRole === "admin" || userRole === "volunteer") && (
 										<button
-											className="btn btn-md btn-outline hover:btn-info border-none hover:scale-105 transition-transform duration-500"
-											onClick={() => navigate(`/dashboard/content-management/edit/${blog._id}`)}
+											className="btn btn-sm btn-outline hover:btn-info transition-all"
+											onClick={() =>
+												navigate(`/dashboard/content-management/edit/${blog._id}`)
+											}
 										>
 											<Pencil size={14} /> Edit
 										</button>
 									)}
 
 									{userRole === "admin" && (
-										blog.status === "draft" ? (
-											<button
-												onClick={() => handleAction(blog._id, "publish")}
-												className="btn btn-md hover:scale-105 transition-transform duration-500  bg-gradient-to-r from-primary to-blue-500 text-white hover:brightness-110 gap-1"
-											>
-												<UploadCloud size={14} /> Publish
-											</button>
-										) : (
-											<button
-												onClick={() => handleAction(blog._id, "unpublish")}
-												className="btn btn-md hover:scale-105 transition-transform duration-500  bg-gradient-to-r from-yellow-500 to-orange-400 text-white hover:brightness-110 gap-1"
-											>
-												<CloudOff size={14} /> Unpublish
-											</button>
-										)
-									)}
+										<>
+											{blog.status === "draft" ? (
+												<button
+													onClick={() => handleAction(blog._id, "publish")}
+													className="btn btn-sm bg-gradient-to-r from-primary to-blue-500 text-white hover:brightness-110"
+												>
+													<UploadCloud size={14} /> Publish
+												</button>
+											) : (
+												<button
+													onClick={() => handleAction(blog._id, "unpublish")}
+													className="btn btn-sm bg-gradient-to-r from-yellow-500 to-orange-400 text-white hover:brightness-110"
+												>
+													<CloudOff size={14} /> Unpublish
+												</button>
+											)}
 
-									{userRole === "admin" && (
-										<button
-											onClick={() => handleDelete(blog._id)}
-											className="btn btn-md hover:scale-105 transition-transform duration-500  bg-gradient-to-r from-red-500 to-pink-500 text-white hover:brightness-110 gap-1"
-										>
-											<Trash2 size={14} /> Delete
-										</button>
+											<button
+												onClick={() => handleDelete(blog._id)}
+												className="btn btn-sm bg-gradient-to-r from-red-500 to-pink-500 text-white hover:brightness-110"
+											>
+												<Trash2 size={14} /> Delete
+											</button>
+										</>
 									)}
 								</div>
 							</div>
@@ -179,6 +201,23 @@ export default function ContentManagement() {
 					))
 				)}
 			</div>
+
+			{/* Pagination */}
+			{totalPages > 1 && (
+				<div className="mt-10 flex justify-center gap-2 flex-wrap">
+					{[...Array(totalPages)].map((_, i) => (
+						<button
+							key={i}
+							onClick={() => setPage(i + 1)}
+							className={`btn btn-sm px-4 ${
+								page === i + 1 ? "btn-active bg-red-600 text-white" : "btn-ghost"
+							}`}
+						>
+							{i + 1}
+						</button>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

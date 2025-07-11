@@ -49,13 +49,15 @@ export default function AllUsers() {
 	const [role, setRole] = useState(null);
 	const [checking, setChecking] = useState(true); // local loading for role check
 	const location = useLocation();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchRole = async () => {
 			if (user?.email) {
 				try {
-					const res = await axios.get(`http://localhost:3000/users?email=${user.email}`);
+					const res = await axios.get(
+						`http://localhost:3000/users?email=${user.email}`
+					);
 					setRole(res.data.role);
 				} catch (err) {
 					console.error("Failed to fetch role", err);
@@ -68,7 +70,7 @@ export default function AllUsers() {
 		};
 
 		fetchRole();
-	}, [user,location.pathname]);
+	}, [user, location.pathname]);
 
 	// Global auth loading or role checking in progress
 	if (loading || checking) {
@@ -76,9 +78,8 @@ export default function AllUsers() {
 	}
 
 	if (role !== "admin") {
-		navigate('/forbidden')
+		navigate("/forbidden");
 	}
-
 
 	// Fetch users with pagination, filter, and search
 	const fetchUsers = async () => {
@@ -104,7 +105,7 @@ export default function AllUsers() {
 			axios.patch(`http://localhost:3000/users/${userId}`, { action }),
 		onSuccess: () => {
 			queryClient.invalidateQueries(["users"]);
-			window.location.reload()
+			window.location.reload();
 		},
 	});
 
@@ -188,62 +189,61 @@ export default function AllUsers() {
 										{user.status}
 									</span>
 								</td>
-								
-									<td className="flex justify-end">
-										<SmartDropdown icon={<MoreVertical size={18} />}>
-											{user.status === "active" && (
-												<li>
-													<button
-														onClick={() => handleAction(user._id, "block")}
-														className="flex items-center gap-2 hover:bg-red-100 hover:text-red-600 px-2 py-1 rounded-md transition-colors"
-													>
-														<UserX size={16} /> Block User
-													</button>
-												</li>
-											)}
-											{user.status === "blocked" && (
-												<li>
-													<button
-														onClick={() => handleAction(user._id, "unblock")}
-														className="flex items-center gap-2 hover:bg-green-100 hover:text-green-600 px-2 py-1 rounded-md transition-colors"
-													>
-														<UserCheck size={16} /> Unblock User
-													</button>
-												</li>
-											)}
-											{user.role !== "donor" && (
-												<li>
-													<button
-														onClick={() => handleAction(user._id, "makeDonor")}
-														className="flex items-center gap-2 hover:bg-blue-100 hover:text-blue-600 px-2 py-1 rounded-md transition-colors"
-													>
-														<ShieldCheck size={16} /> Make Donor
-													</button>
-												</li>
-											)}
-											{user.role !== "volunteer" && (
-												<li>
-													<button
-														onClick={() => handleAction(user._id, "makeVolunteer")}
-														className="flex items-center gap-2 hover:bg-blue-100 hover:text-blue-600 px-2 py-1 rounded-md transition-colors"
-													>
-														<ShieldCheck size={16} /> Make Volunteer
-													</button>
-												</li>
-											)}
-											{user.role !== "admin" && (
-												<li>
-													<button
-														onClick={() => handleAction(user._id, "makeAdmin")}
-														className="flex items-center gap-2 hover:bg-purple-100 hover:text-purple-600 px-2 py-1 rounded-md transition-colors"
-													>
-														<ShieldCheck size={16} /> Make Admin
-													</button>
-												</li>
-											)}
-										</SmartDropdown>
-									</td>
-								
+
+								<td className="flex justify-end">
+									<SmartDropdown icon={<MoreVertical size={18} />}>
+										{user.status === "active" && (
+											<li>
+												<button
+													onClick={() => handleAction(user._id, "block")}
+													className="flex items-center gap-2 hover:bg-red-100 hover:text-red-600 px-2 py-1 rounded-md transition-colors"
+												>
+													<UserX size={16} /> Block User
+												</button>
+											</li>
+										)}
+										{user.status === "blocked" && (
+											<li>
+												<button
+													onClick={() => handleAction(user._id, "unblock")}
+													className="flex items-center gap-2 hover:bg-green-100 hover:text-green-600 px-2 py-1 rounded-md transition-colors"
+												>
+													<UserCheck size={16} /> Unblock User
+												</button>
+											</li>
+										)}
+										{user.role !== "donor" && (
+											<li>
+												<button
+													onClick={() => handleAction(user._id, "makeDonor")}
+													className="flex items-center gap-2 hover:bg-blue-100 hover:text-blue-600 px-2 py-1 rounded-md transition-colors"
+												>
+													<ShieldCheck size={16} /> Make Donor
+												</button>
+											</li>
+										)}
+										{user.role !== "volunteer" && (
+											<li>
+												<button
+													onClick={() => handleAction(user._id, "makeVolunteer")}
+													className="flex items-center gap-2 hover:bg-blue-100 hover:text-blue-600 px-2 py-1 rounded-md transition-colors"
+												>
+													<ShieldCheck size={16} /> Make Volunteer
+												</button>
+											</li>
+										)}
+										{user.role !== "admin" && (
+											<li>
+												<button
+													onClick={() => handleAction(user._id, "makeAdmin")}
+													className="flex items-center gap-2 hover:bg-purple-100 hover:text-purple-600 px-2 py-1 rounded-md transition-colors"
+												>
+													<ShieldCheck size={16} /> Make Admin
+												</button>
+											</li>
+										)}
+									</SmartDropdown>
+								</td>
 							</tr>
 						))}
 					</tbody>
