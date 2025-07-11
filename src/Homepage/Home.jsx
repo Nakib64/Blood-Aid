@@ -10,6 +10,11 @@ import {
 	FiX,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, EffectCoverflow } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/effect-coverflow";
 
 const fadeUp = {
 	hidden: { opacity: 0, y: 40 },
@@ -18,7 +23,7 @@ const fadeUp = {
 		y: 0,
 		transition: {
 			delay: i * 0.2,
-			duration: 0.6,
+			duration: 0.9,
 			ease: "easeOut",
 		},
 	}),
@@ -29,11 +34,35 @@ const fadeRight = {
 	visible: {
 		opacity: 1,
 		x: 0,
-		transition: { duration: 0.7, ease: "easeOut" },
+		transition: { duration: 1, ease: "easeOut" },
 	},
 };
 
 export default function Home() {
+	const donors = [
+		{
+			name: "Nafiz ",
+			group: "O+",
+			img: "https://i.ibb.co/2Y3sqbt3/profile-1.jpg",
+			quote:
+				"Donating blood gives me purpose. It’s a small act with a massive impact.",
+		},
+		{
+			name: "Farhan Ahmed",
+			group: "A-",
+			img: "https://i.ibb.co/s91DSJJr/charlie-green-3-Jmf-ENc-L24-M-unsplash-1.jpg",
+			quote:
+				"I feel honored knowing my blood might save someone’s mother or child.",
+		},
+		{
+			name: "Hasan Kabir",
+			group: "B+",
+			img: "https://i.ibb.co/F4nq0bkn/ana-nichita-BI91-Nrpp-E38-unsplash-1.jpg",
+			quote:
+				"BloodAid makes it so easy to connect and help instantly when needed.",
+		},
+	];
+
 	return (
 		<div
 			className="min-h-screen flex flex-col bg-white text-gray-800"
@@ -75,13 +104,22 @@ export default function Home() {
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 						{[
 							{
-								icon: <FiHeart className="text-5xl text-red-600 mb-4 mx-auto" />, title: "Save Lives", desc: "Your blood could be the reason someone gets another chance at life."
+								icon: <FiHeart className="text-5xl text-red-600 mb-4 mx-auto" />,
+								title: "Save Lives",
+								desc:
+									"Your blood could be the reason someone gets another chance at life.",
 							},
 							{
-								icon: <FiUser className="text-5xl text-red-600 mb-4 mx-auto" />, title: "Join a Cause", desc: "Be part of a selfless community committed to health and humanity."
+								icon: <FiUser className="text-5xl text-red-600 mb-4 mx-auto" />,
+								title: "Join a Cause",
+								desc:
+									"Be part of a selfless community committed to health and humanity.",
 							},
 							{
-								icon: <FiSearch className="text-5xl text-red-600 mb-4 mx-auto" />, title: "Easy to Find", desc: "Connect with local donors or request blood easily using our platform."
+								icon: <FiSearch className="text-5xl text-red-600 mb-4 mx-auto" />,
+								title: "Easy to Find",
+								desc:
+									"Connect with local donors or request blood easily using our platform.",
 							},
 						].map((item, i) => (
 							<motion.div
@@ -115,12 +153,14 @@ export default function Home() {
 						{[
 							{
 								title: "Real-time Donor Matching",
-								desc: "Instantly match recipients with eligible donors near their location based on need, availability and blood type.",
+								desc:
+									"Instantly match recipients with eligible donors near their location based on need, availability and blood type.",
 								bg: "from-red-50 via-white to-red-100",
 							},
 							{
 								title: "Secure & Verified Donors",
-								desc: "Every donor profile is verified and authenticated so recipients can trust their lifesavers.",
+								desc:
+									"Every donor profile is verified and authenticated so recipients can trust their lifesavers.",
 								bg: "from-white via-red-50 to-white",
 							},
 						].map((item, i) => (
@@ -130,7 +170,9 @@ export default function Home() {
 								variants={fadeRight}
 								className={`p-8 bg-gradient-to-tr ${item.bg} rounded-2xl shadow-xl`}
 							>
-								<h3 className="text-2xl font-semibold mb-4 text-red-700">{item.title}</h3>
+								<h3 className="text-2xl font-semibold mb-4 text-red-700">
+									{item.title}
+								</h3>
 								<p className="text-gray-700">{item.desc}</p>
 							</motion.div>
 						))}
@@ -164,11 +206,11 @@ export default function Home() {
 								src={
 									i === 0
 										? " https://i.ibb.co/9kbKMzhW/national-cancer-institute-1c8sj2-IO2-I4-unsplash-1.jpg"
-									: i === 1
-									? "https://i.ibb.co/zWD0f6rb/solen-feyissa-j-Gm-BZypo-FPc-unsplash-1.jpg"
-									: i === 2
-									? "https://i.ibb.co/SwLQd737/acton-crawford-8-PB-TFEy2-XQ-unsplash-1.jpg"
-									: "https://i.ibb.co/p8stDTC/graham-ruttan-b3-LF7-JHQmms-unsplash-1.jpg"
+										: i === 1
+										? "https://i.ibb.co/zWD0f6rb/solen-feyissa-j-Gm-BZypo-FPc-unsplash-1.jpg"
+										: i === 2
+										? "https://i.ibb.co/SwLQd737/acton-crawford-8-PB-TFEy2-XQ-unsplash-1.jpg"
+										: "https://i.ibb.co/p8stDTC/graham-ruttan-b3-LF7-JHQmms-unsplash-1.jpg"
 								}
 								alt={`Hospital ${i + 1}`}
 							/>
@@ -178,71 +220,53 @@ export default function Home() {
 			</motion.section>
 
 			{/* Volunteers Section */}
-			<motion.section
-				className="py-20 bg-gradient-to-br from-red-50 to-white max-w-7xl mx-auto"
-				variants={fadeRight}
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true }}
-			>
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-4xl font-bold mb-6 text-red-700">Meet Our Heroes</h2>
-					<p className="max-w-2xl mx-auto text-gray-600 mb-12">
-						Behind every donation is a selfless individual committed to saving lives.
-						Here’s what some of our top donors have to say.
-					</p>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-						{[
-							{
-								name: "Nafiz ",
-								group: "O+",
-								img: "https://i.ibb.co/2Y3sqbt3/profile-1.jpg",
-								quote:
-									"Donating blood gives me purpose. It’s a small act with a massive impact.",
-							},
-							{
-								name: "Farhan Ahmed",
-								group: "A-",
-								img: "https://i.ibb.co/s91DSJJr/charlie-green-3-Jmf-ENc-L24-M-unsplash-1.jpg",
-								quote:
-									"I feel honored knowing my blood might save someone’s mother or child.",
-							},
-							{
-								name: "Hasan Kabir",
-								group: "B+",
-								img: "https://i.ibb.co/F4nq0bkn/ana-nichita-BI91-Nrpp-E38-unsplash-1.jpg",
-								quote:
-									"BloodAid makes it so easy to connect and help instantly when needed.",
-							},
-						].map((donor, idx) => (
-							<motion.div
-								key={idx}
-								variants={fadeRight}
-								custom={idx}
-								className="bg-white rounded-xl p-6 shadow hover:shadow-xl transition-all text-left space-y-4"
-							>
-								<div className="flex items-center gap-4">
-									<img
-										src={donor.img}
-										alt={donor.name}
-										className="w-16 h-16 rounded-full border-2 border-red-500 object-cover"
-									/>
-									<div>
-										<h4 className="text-lg font-semibold text-red-700">{donor.name}</h4>
-										<span className="text-sm text-gray-500">
-											Blood Group: {donor.group}
-										</span>
-									</div>
-								</div>
-								<p className="text-gray-600 text-sm italic">“{donor.quote}”</p>
-							</motion.div>
-						))}
+		<motion.section
+	className="py-20 bg-gradient-to-br from-red-50 to-white max-w-7xl mx-auto"
+	variants={fadeRight}
+	initial="hidden"
+	whileInView="visible"
+	viewport={{ once: true }}
+>
+	<div className="container mx-auto px-4 text-center">
+		<h2 className="text-4xl font-bold mb-6 text-red-700">Meet Our Heroes</h2>
+		<p className="max-w-2xl mx-auto text-gray-600 mb-12">
+			Behind every donation is a selfless individual committed to saving lives.
+			Here’s what some of our top donors have to say.
+		</p>
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+			{donors.map((donor, idx) => (
+				<motion.div
+					key={idx}
+					className="bg-white rounded-xl p-6 shadow hover:shadow-xl transition-all text-left space-y-4"
+					variants={fadeRight}
+					custom={idx}
+				>
+					<div className="flex items-center gap-4">
+						<img
+							src={donor.img}
+							alt={donor.name}
+							className="w-16 h-16 rounded-full border-2 border-red-500 object-cover"
+						/>
+						<div>
+							<h4 className="text-lg font-semibold text-red-700">{donor.name}</h4>
+							<span className="text-sm text-gray-500">
+								Blood Group: {donor.group}
+							</span>
+						</div>
 					</div>
-				</div>
-			</motion.section>
+					<p className="text-gray-600 text-sm italic">“{donor.quote}”</p>
+				</motion.div>
+			))}
+		</div>
+	</div>
+</motion.section>
+
+
+
+
 
 			{/* Contact Us */}
-		{/* Contact Us */}
+			{/* Contact Us */}
 			<motion.section
 				className="py-20 bg-gray-50 max-w-7xl mx-auto my-20"
 				variants={fadeUp}
@@ -280,5 +304,6 @@ export default function Home() {
 					</div>
 				</div>
 			</motion.section>
-
-			</div>)}
+		</div>
+	);
+}

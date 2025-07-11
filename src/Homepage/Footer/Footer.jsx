@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router";
 
 const Footer = () => {
-    return (
-        <div>
-            <footer className="bg-red-800 text-gray-100 py-8 mt-auto">
+	return (
+		<div>
+			<footer className="bg-red-800 text-gray-100 py-8 mt-auto">
 				<div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
 					<div>
 						<h3 className="text-xl font-bold text-white mb-2">BloodBond</h3>
@@ -15,7 +15,15 @@ const Footer = () => {
 						<ul className="space-y-1">
 							<li>
 								<Link to="/" className="hover:underline">
-									Home
+									<button
+										onClick={() => {
+											
+											window.scrollTo({ top: 0, behavior: "smooth" })
+										
+										}}
+									>
+										Home
+									</button>
 								</Link>
 							</li>
 							<li>
@@ -24,7 +32,7 @@ const Footer = () => {
 								</Link>
 							</li>
 							<li>
-								<Link to="/search" className="hover:underline">
+								<Link to="/searchDonor" className="hover:underline">
 									Search Donors
 								</Link>
 							</li>
@@ -44,8 +52,8 @@ const Footer = () => {
 					&copy; 2025 BloodBond. All rights reserved.
 				</div>
 			</footer>
-        </div>
-    );
+		</div>
+	);
 };
 
 export default Footer;

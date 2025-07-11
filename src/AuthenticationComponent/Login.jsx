@@ -5,26 +5,22 @@ import Lottie from "react-lottie-player";
 import animationData from "../assets/login-animation.json"; // you must add a Lottie JSON file
 import { authContext } from "../Authentication/AuthContext";
 import { Slide, toast } from "react-toastify";
-;
-
 export default function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
 	const { login } = useContext(authContext);
-	const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
-	  const location = useLocation()
-
-
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleSubmit = (e) => {
-		setLoading(true)
+		setLoading(true);
 		e.preventDefault();
 		const email = e.target.email.value;
 		const password = e.target.password.value;
 		login(email, password)
 			.then(() => {
-				setLoading(false)
-				 navigate(location.state? `${location.state}`:'/')
+				setLoading(false);
+				navigate(location.state ? `${location.state}` : "/");
 				toast.success(
 					<span className="flex items-center gap-2">
 						<FiCheckCircle className="text-xl" />
@@ -38,7 +34,7 @@ export default function LoginPage() {
 				);
 			})
 			.catch((error) => {
-				setLoading(false)
+				setLoading(false);
 				toast.error(
 					<span className="flex items-center gap-2">
 						<FiCheckCircle className="text-xl" />
@@ -52,8 +48,6 @@ export default function LoginPage() {
 				);
 			});
 	};
-
-	
 
 	return (
 		<div
@@ -99,8 +93,7 @@ export default function LoginPage() {
 							type="submit"
 							className="w-full py-2 flex justify-center items-center gap-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition"
 						>
-							{loading && <span className="loading loading-spinner loading-md"></span>
-}
+							{loading && <span className="loading loading-spinner loading-md"></span>}
 							Login
 						</button>
 					</form>
@@ -114,7 +107,10 @@ export default function LoginPage() {
 							Register now
 						</Link>
 					</p>
-		
+
+					<Link to={"/"}>
+						<button className="btn btn-primary w-full mt-30">Back to Home</button>
+					</Link>
 				</div>
 			</div>
 		</div>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
 import { authContext } from "../Authentication/AuthContext";
 
-export default function MyDonationRequests() {
+export default function AllDonationRequests() {
   const { user } = useContext(authContext);
   const [requests, setRequests] = useState([]);
   const [status, setStatus] = useState("");
@@ -21,7 +21,7 @@ export default function MyDonationRequests() {
     setLoading(true);
     axios
       .get(`http://localhost:3000/donationRequests`, {
-        params: { email: user.email, status, page },
+        params: {  status, page },
       })
       .then((res) => {
         setRequests(res.data.data);
@@ -49,7 +49,7 @@ export default function MyDonationRequests() {
       className=" py-6 max-w-7xl mx-auto w-full"
     >
       <h2 className="text-xl md:text-3xl font-bold mb-6 text-center">
-        🩸 My Donation Requests
+        🩸  Donation Requests
       </h2>
 
       <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
@@ -98,8 +98,7 @@ export default function MyDonationRequests() {
                   <motion.tr
                     key={req._id}
         
-                   className="transition duration-300 hover:bg-gray-50  shadow-sm hover:shadow-lg"
-
+                    className="transition duration-300 even:bg-gray-50 hover:bg-red-50 shadow-sm shadow-gray-500 hover:shadow-md"
                   >
                     <td className="py-3 px-4 font-medium">{req.recipientName}</td>
                     <td className="py-3 px-4">

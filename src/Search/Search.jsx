@@ -27,13 +27,16 @@ export default function SearchDonors() {
 	}, [district, districts]);
 
 	const handleSearch = () => {
-		if (!bloodGroup || !district || !upazila) return;
+		// if (!bloodGroup || !district || !upazila) return 
 		setLoading(true);
 		axios
 			.get("http://localhost:3000/users", {
 				params: { bloodGroup, district, upazila },
 			})
-			.then((res) => setDonors(res.data))
+			.then((res) =>{
+				setDonors(res.data)
+			
+			} )
 			.finally(() => setLoading(false));
 	};
 
@@ -41,10 +44,10 @@ export default function SearchDonors() {
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			className="max-w-6xl mx-auto px-4 py-10 min-h-screen"
+			className="w-full mx-auto px-4 py-10 min-h-screen bg-[url('https://i.ibb.co/zWj10frv/nguy-n-hi-p-ma-Ye-Ml3x-Cr-Y-unsplash.jpg')] bg-cover bg-no-repeat"
 		>
 			{/* Form */}
-			<div className="bg-white shadow-xl rounded-xl border border-gray-100 p-8 space-y-6">
+			<div className="  p-8 space-y-6 max-w-7xl mx-auto">
 				<h2 className="text-3xl font-bold text-red-700 text-center">
 					🔍 Search Blood Donors
 				</h2>
@@ -109,7 +112,7 @@ export default function SearchDonors() {
 				<motion.div
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
-					className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10"
+					className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-7xl"
 				>
 					{donors.map((donor) => (
 						<motion.div

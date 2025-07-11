@@ -4,6 +4,7 @@ import logo from "../../assets/pngegg.png";
 import { Link, useLocation } from "react-router";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import * as Tooltip from '@radix-ui/react-tooltip';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,7 +49,7 @@ const Navbar = () => {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="bg-red-800 text-white shadow sticky top-0 z-50"
     >
-      <div className="w-full mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="w-full mx-auto px-4 py-1 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold flex items-center gap-2">
           <img src={logo} alt="logo" className="h-12 w-12" />
           <span className="hover:text-red-300 transition-colors duration-300">BloodAid</span>
@@ -60,14 +61,29 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4 md:gap-6">
           {user ? (
-            <Link to="/dashboard">
+			<Tooltip.Provider>
+	<Tooltip.Root>
+		<Tooltip.Trigger asChild>
+			    <Link to="/dashboard">
               <motion.img
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.05 }}
                 src={user.photoURL || "/default-avatar.png"}
                 alt="avatar"
                 className="w-12 h-12 rounded-full border-2 border-white cursor-pointer shadow-md"
               />
             </Link>
+		</Tooltip.Trigger>
+		<Tooltip.Content
+			side="left"
+			className="bg-black text-white px-2 py-1 rounded text-sm"
+		>
+			Dashboard
+		</Tooltip.Content>
+	</Tooltip.Root>
+</Tooltip.Provider>
+           
+
+		
           ) : (
             <div className="flex gap-4">
               <NavLink to="/authentication/login" label="Login" />

@@ -72,13 +72,13 @@ export default function DonationRequestDetails() {
 			initial={{ opacity: 0, y: 30 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className="px-4 sm:px-6 md:px-10 py-8 max-w-4xl mx-auto"
+			className="px-4 sm:px-6 md:px-10 py-8 w-full min-h-screen bg-[url('https://i.ibb.co/7JySbmCy/nguy-n-hi-p-2r-NHli-X6-XHk-unsplash.jpg')] bg-cover  mx-auto"
 		>
 			<motion.div
 				initial={{ opacity: 0, scale: 0.95 }}
 				animate={{ opacity: 1, scale: 1 }}
 				transition={{ duration: 0.4 }}
-				className="bg-gradient-to-br from-red-50 to-white rounded-3xl my-20 shadow-2xl border border-gray-100 p-10 space-y-6"
+				className="bg-gradient-to-br max-w-4xl mx-auto from-red-100 to-white rounded-3xl my-20 shadow-2xl border border-gray-100 p-10 space-y-6"
 			>
 				<h2 className="text-3xl font-extrabold text-red-700 text-center tracking-tight">
 					🩸 Donation Request Details

@@ -3,10 +3,14 @@ import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import Navbar from "../Homepage/Navbar/Navbar";
 import Footer from "../Homepage/Footer/Footer";
+import ScrollToTopButton from "../Homepage/Scroll/Scroll";
 
 const Homepage = () => {
 	return (
 		<div className="min-h-screen flex flex-col">
+			<div>
+				<ScrollToTopButton></ScrollToTopButton>
+			</div>
 			<ToastContainer
 				position="top-center"
 				theme="colored"
