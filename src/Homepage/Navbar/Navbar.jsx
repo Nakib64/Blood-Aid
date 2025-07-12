@@ -8,20 +8,20 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 
 const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [, setDropdownOpen] = useState(false);
-	const dropdownRef = useRef();
+	// const [, setDropdownOpen] = useState(false);
+	// const dropdownRef = useRef();
 	const { user } = useContext(authContext);
 	const location = useLocation();
 
-	useEffect(() => {
-		function handleClickOutside(e) {
-			if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-				setDropdownOpen(false);
-			}
-		}
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, []);
+	// useEffect(() => {
+	// 	function handleClickOutside(e) {
+	// 		if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+	// 			setDropdownOpen(false);
+	// 		}
+	// 	}
+	// 	document.addEventListener("mousedown", handleClickOutside);
+	// 	return () => document.removeEventListener("mousedown", handleClickOutside);
+	// }, []);
 
 	const NavLink = ({ to, label }) => (
 		<Link

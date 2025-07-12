@@ -9,6 +9,7 @@ export default function AdminDashboard() {
 	
 	const [totalUsers, setTotalUsers] = useState();
 	const [totalDonations, setTotalDonations] = useState();
+	const [fund, setFund] = useState()
 
 	useEffect(() => {
 		axios.get("http://localhost:3000/users").then((res) => {
@@ -17,6 +18,9 @@ export default function AdminDashboard() {
 		axios.get("http://localhost:3000/totalDonationRequests").then((res) => {
 			setTotalDonations(res.data);
 		});
+		axios.get('http://localhost:3000/totalDonations').then(res=>{
+			setFund(res.data)
+		})
 	}, [totalUsers]);
 
 	return (
@@ -55,7 +59,7 @@ export default function AdminDashboard() {
 					</div>
 					<div>
 						<p className="text-4xl font-semibold text-gray-900">
-							{/* {`$${totalFunding?.toLocaleString() || "0"}`} */}
+							BDT <CountUp end={parseInt(fund)/100} duration={4}/>
 						</p>
 						<p className="text-gray-500 text-sm tracking-widest uppercase font-medium mt-1">
 							Total Funding

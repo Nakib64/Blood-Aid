@@ -24,6 +24,8 @@ import Forbidden from "../Forbidden/Forbidden";
 import AdminRoute from "../AdminDashBoard/AdminRoute";
 import PublishedBlogs from "../Blogs/Blogs";
 import EditBlog from "../AddBlog/EditBlog";
+import FundingPage from "../Payment/Funding";
+import Payment from "../Payment/Payment";
 
 
 const Routes = createBrowserRouter([
@@ -58,7 +60,15 @@ const Routes = createBrowserRouter([
             {
                 path:"/blogs",
                 Component: PublishedBlogs
-            }
+            },
+			{
+				path: '/funding',
+				element: <PrivateRoute><FundingPage></FundingPage></PrivateRoute>
+			},
+			{
+				path: '/payment',
+				element: <PrivateRoute><Payment></Payment></PrivateRoute>
+			}
 		],
 	},
 	{
@@ -122,8 +132,6 @@ const Routes = createBrowserRouter([
 			{
 				path: '/dashboard/blog/:id',
 				element:<AdminRoute><EditBlog></EditBlog></AdminRoute>
-				
-				
 			}
 		],
 	},
