@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import JoditEditor from "jodit-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 
 export default function EditBlog() {
 	const { id } = useParams();
@@ -23,17 +24,22 @@ export default function EditBlog() {
 		formState: { errors },
 	} = useForm();
 
-	// Load blog data
-	useEffect(() => {
-		axios.get(`http://localhost:3000/blog/${id}`).then((res) => {
-			const blog = res.data;
+	// ✅ Fetch blog data using React Query
+	const { data: blog, isLoading, isError } = useQuery({
+		queryKey: ["blog", id],
+		queryFn: async () => {
+			const { data } = await axios.get(`http://localhost:3000/blog/${id}`);
+			return data;
+		},
+		enabled: !!id,
+		onSuccess: (blog) => {
 			setValue("title", blog.title);
 			setContent(blog.content);
 			setPreview(blog.thumbnail);
-		});
-	}, [id, setValue]);
+		},
+	});
 
-	// Handle file change
+	// 🖼️ Thumbnail preview
 	const handleImagePreview = (e) => {
 		const file = e.target.files[0];
 		if (file) {
@@ -41,12 +47,12 @@ export default function EditBlog() {
 		}
 	};
 
+	// ✅ Submit blog update
 	const onSubmit = async (data) => {
 		try {
 			setSubmitting(true);
 			let imageUrl = preview;
 
-			// If new image is selected
 			if (data.thumbnail[0]) {
 				setUploading(true);
 				const formData = new FormData();
@@ -74,6 +80,9 @@ export default function EditBlog() {
 			setSubmitting(false);
 		}
 	};
+
+	if (isLoading) return <p className="text-center py-10">Loading blog data...</p>;
+	if (isError) return <p className="text-center text-red-500">Failed to load blog.</p>;
 
 	return (
 		<div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -145,7 +154,7 @@ export default function EditBlog() {
 					</div>
 				</div>
 
-				{/* Button */}
+				{/* Submit */}
 				<div className="text-right">
 					<button
 						type="submit"

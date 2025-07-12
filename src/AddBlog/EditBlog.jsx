@@ -1,18 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
-import  JoditEditor  from "jodit-react";
+import JoditEditor from "jodit-react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
-const EditBlog=()=> {
+const fetchBlogById = async (id) => {
+	const res = await axios.get(`http://localhost:3000/blog/${id}`);
+	return res.data;
+};
+
+const EditBlog = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const editor = useRef(null);
 	const [content, setContent] = useState("");
-	const [loading, setLoading] = useState(true);
 	const [initialThumb, setInitialThumb] = useState("");
-    
+
 	const {
 		register,
 		handleSubmit,
@@ -20,21 +25,26 @@ const EditBlog=()=> {
 		formState: { errors },
 	} = useForm();
 
+	// Fetch blog using TanStack Query
+	const { data: blog, isLoading, isError } = useQuery({
+		queryKey: ["blog", id],
+		queryFn: () => fetchBlogById(id),
+	});
+
+	// When blog data is loaded, set initial values
 	useEffect(() => {
-		axios.get(`http://localhost:3000/blog/${id}`).then((res) => {
-			const blog = res.data;
+		if (blog) {
 			setValue("title", blog.title);
 			setInitialThumb(blog.thumbnail);
 			setContent(blog.content);
-			setLoading(false);
-		});
-	}, [id, setValue]);
+		}
+	}, [blog, setValue]);
 
 	const onSubmit = async (data) => {
 		try {
 			let imageUrl = initialThumb;
 
-			// If new image selected
+			// If a new thumbnail is uploaded
 			if (data.thumbnail[0]) {
 				const formData = new FormData();
 				formData.append("image", data.thumbnail[0]);
@@ -55,11 +65,13 @@ const EditBlog=()=> {
 			toast.success("Blog updated successfully!");
 			navigate("/dashboard/content-management");
 		} catch (err) {
+			console.error(err);
 			toast.error("Update failed!");
 		}
 	};
 
-	if (loading) return <p className="text-center p-6">Loading blog...</p>;
+	if (isLoading) return <p className="text-center p-6">Loading blog...</p>;
+	if (isError) return <p className="text-center text-red-500">Failed to load blog.</p>;
 
 	return (
 		<div className="max-w-3xl mx-auto px-4 py-8">
@@ -106,8 +118,7 @@ const EditBlog=()=> {
 				</button>
 			</form>
 		</div>
-      
 	);
-}
+};
 
-export default EditBlog
+export default EditBlog;

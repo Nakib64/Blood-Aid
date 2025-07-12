@@ -1,46 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router";
 import { authContext } from "../Authentication/AuthContext";
 import Loading from "../Loading/Loading";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchUserRole = async (email) => {
+	const res = await axios.get(`http://localhost:3000/users?email=${email}`);
+	return res.data.role;
+};
 
 const AdminRoute = ({ children }) => {
 	const { user, loading } = useContext(authContext);
-	const [role, setRole] = useState(null);
-	const [checking, setChecking] = useState(true); // local loading for role check
 	const location = useLocation();
 
-	useEffect(() => {
-		const fetchRole = async () => {
-			if (user?.email) {
-				try {
-					const res = await axios.get(`http://localhost:3000/users?email=${user.email}`);
-					setRole(res.data.role);
-				} catch (err) {
-					console.error("Failed to fetch role", err);
-				} finally {
-					setChecking(false);
-				}
-			} else {
-				setChecking(false);
-			}
-		};
+	const {
+		data: role,
+		isLoading: roleLoading,
+		isError,
+	} = useQuery({
+		queryKey: ["userRole", user?.email],
+		enabled: !!user?.email, // only run query if email exists
+		queryFn: () => fetchUserRole(user.email),
+	});
 
-		fetchRole();
-	}, [user,location.pathname]);
+	if (loading || roleLoading) return <Loading />;
+	if (isError) return <Navigate to="/forbidden" state={{ from: location }} replace />;
 
-	// Global auth loading or role checking in progress
-	if (loading || checking) {
-		return <Loading />;
-	}
-
+	// Only allow non-donor roles
 	if (role !== "donor") {
 		return <>{children}</>;
 	}
 
-	// If admin
-    return <Navigate to="/forbidden" state={{ from: location }} replace />;
-	
+	// If donor, redirect
+	return <Navigate to="/forbidden" state={{ from: location }} replace />;
 };
 
 export default AdminRoute;

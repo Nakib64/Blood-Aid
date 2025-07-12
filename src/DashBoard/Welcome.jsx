@@ -1,63 +1,72 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { authContext } from "../Authentication/AuthContext";
-import RecentMyDonations from "./Recent";
 import axios from "axios";
+
+import { authContext } from "../Authentication/AuthContext";
 import Loading from "../Loading/Loading";
 import AdminDashboard from "../AdminDashBoard/Overview";
+import RecentMyDonations from "./Recent";
+
+const fetchUserRole = async (email) => {
+  const { data } = await axios.get(`http://localhost:3000/users?email=${email}`);
+  return data.role;
+};
+
 const Welcome = () => {
-	const { user } = useContext(authContext);
-	const [role, setRole] = useState();
-	const [loading, setLoading] = useState(true);
-	useEffect(() => {
-		if (user?.email) {
-			axios.get(`http://localhost:3000/users?email=${user.email}`).then((res) => {
-				const userRole = res.data.role;
-				setRole(userRole);
-				setLoading(false);
-			});
-		}
-	}, [user]);
+  const { user } = useContext(authContext);
+  const email = user?.email;
 
-	if (loading) {
-		return <Loading></Loading>;
-	}
+  const {
+    data: role,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user-role", email],
+    queryFn: () => fetchUserRole(email),
+    enabled: !!email,
+  });
 
-	return (
-		<motion.div
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			className="max-w-7xl mx-auto mb-8 space-y-6"
-		>
-			<div className="bg-gradient-to-r from-red-100 to-red-50 p-6 rounded-xl shadow flex items-center justify-between">
-				<div>
-					<h1 className="text-3xl font-bold text-red-700">
-						Welcome,{" "}
-						<span className="bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent font-bold tracking-wide uppercase">
-							{role !== "donor" && role.toUpperCase()}
-						</span>{" "}
-						{user?.displayName || "User"}!
-					</h1>
-					{role === "donor" && (
-						<p className="text-gray-600 mt-1">
-							Manage your donations and help save lives.
-						</p>
-					)}
+  if (isLoading || !email) return <Loading />;
+  if (isError) return <p className="text-center text-red-500">Failed to load user role.</p>;
+
+  const isDonor = role === "donor";
+  const displayName = user?.displayName || "User";
+  const photo = user?.photoURL || "/default-user.png";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-7xl mx-auto mb-8 space-y-6"
+    >
+      {/* Welcome Banner */}
+      <div className="bg-gradient-to-r from-red-100 to-red-50 p-6 rounded-xl shadow flex items-center justify-between flex-col sm:flex-row gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-red-700">
+            Welcome,{" "}
+            <span className="bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent font-bold tracking-wide uppercase">
+              {!isDonor && role.toUpperCase()}
+            </span>{" "}
+            {displayName}!
+          </h1>
           <p className="text-gray-600 mt-1">
-						Manage your users and donations to help save lives.
-					</p>
-				</div>
-				<img
-					src={user.photoURL}
-					alt="donate"
-					className="w-20 md:w-28 h-20 md:h-28 drop-shadow rounded-full"
-				/>
-			</div>
-      {role !== "donor" && <AdminDashboard></AdminDashboard>}
-      {role == "donor" && <RecentMyDonations></RecentMyDonations> }
-			
-		</motion.div>
-	);
+            {isDonor
+              ? "Manage your donations and help save lives."
+              : "Manage your users and donations to help save lives."}
+          </p>
+        </div>
+        <img
+          src={photo}
+          alt="User"
+          className="w-20 md:w-28 h-20 md:h-28 object-cover drop-shadow rounded-full border-2 border-red-200"
+        />
+      </div>
+
+      {/* Role-Based Section */}
+      {isDonor ? <RecentMyDonations /> : <AdminDashboard />}
+    </motion.div>
+  );
 };
 
 export default Welcome;

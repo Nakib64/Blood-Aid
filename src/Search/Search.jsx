@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 export default function SearchDonors() {
 	const [districts, setDistricts] = useState([]);
@@ -10,9 +11,8 @@ export default function SearchDonors() {
 	const [bloodGroup, setBloodGroup] = useState("");
 	const [district, setDistrict] = useState("");
 	const [upazila, setUpazila] = useState("");
-
-	const [loading, setLoading] = useState(false);
-	const [donors, setDonors] = useState([]);
+	const [page, setPage] = useState(1);
+	const limit = 6;
 
 	useEffect(() => {
 		axios.get("/bd_districts_with_upazilas.json").then((res) => {
@@ -26,18 +26,16 @@ export default function SearchDonors() {
 		setUpazila("");
 	}, [district, districts]);
 
-	const handleSearch = () => {
-		// if (!bloodGroup || !district || !upazila) return
-		setLoading(true);
-		axios
-			.get("http://localhost:3000/users", {
-				params: { bloodGroup, district, upazila },
-			})
-			.then((res) => {
-				setDonors(res.data);
-			})
-			.finally(() => setLoading(false));
-	};
+	const { data, isLoading, refetch } = useQuery({
+		queryKey: ["users", bloodGroup, district, upazila, page],
+		queryFn: () =>
+			axios
+				.get("http://localhost:3000/SearchedUsers", {
+					params: { bloodGroup, district, upazila, page, limit },
+				})
+				.then((res) => res.data),
+		keepPreviousData: true, // Smooth UI while loading next page
+	});
 
 	return (
 		<motion.div
@@ -51,10 +49,7 @@ export default function SearchDonors() {
 					🔍 Search Blood Donors
 				</h2>
 
-				<form
-					className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-					onChange={handleSearch}
-				>
+				<form className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 					<select
 						value={bloodGroup}
 						onChange={(e) => setBloodGroup(e.target.value)}
@@ -97,7 +92,7 @@ export default function SearchDonors() {
 
 				<div className="text-center">
 					<button
-						onClick={handleSearch}
+						onClick={refetch()}
 						className="mt-4 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 shadow-md transition"
 					>
 						Search
@@ -106,17 +101,17 @@ export default function SearchDonors() {
 			</div>
 
 			{/* Results */}
-			{loading ? (
+			{isLoading ? (
 				<div className="flex justify-center items-center h-48">
 					<Loader2 className="animate-spin text-red-600 w-10 h-10" />
 				</div>
-			) : donors.length > 0 ? (
+			) : data?.users?.length > 0 ? (
 				<motion.div
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 max-w-7xl mx-auto px-4"
 				>
-					{donors.map((donor) => (
+					{data?.users?.map((donor) => (
 						<motion.div
 							key={donor._id}
 							whileHover={{ scale: 1.03 }}
@@ -183,9 +178,34 @@ export default function SearchDonors() {
 						</motion.div>
 					))}
 				</motion.div>
-			) : donors.length === 0 && bloodGroup ? (
+			) : data?.users?.length === 0 && bloodGroup ? (
 				<p className="text-center text-gray-500 mt-10">No donors found.</p>
 			) : null}
+
+			<div className="flex justify-center mt-10 gap-2">
+				<button
+					onClick={() => setPage((p) => Math.max(p - 1, 1))}
+					disabled={page === 1}
+					className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+				>
+					Prev
+				</button>
+
+				<span className="px-4 py-2 bg-white border rounded text-red-700 font-bold">
+					Page {page}
+				</span>
+
+				<button
+					onClick={() => {
+						const maxPage = Math.ceil(data?.total / limit);
+						if (page < maxPage) setPage((p) => p + 1);
+					}}
+					disabled={page >= Math.ceil(data?.total / limit)}
+					className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+				>
+					Next
+				</button>
+			</div>
 		</motion.div>
 	);
 }
