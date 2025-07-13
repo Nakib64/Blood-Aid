@@ -216,3 +216,4 @@ function getVisiblePages(currentPage, totalPages) {
   }
   return pages;
 }
+ 
