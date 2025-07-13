@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchBlogById = async (id) => {
-	const res = await axios.get(`http://localhost:3000/blog/${id}`);
+	const res = await axios.get(`https://blood-aid-server-eight.vercel.app/blog/${id}`);
 	return res.data;
 };
 
@@ -61,7 +61,7 @@ const EditBlog = () => {
 				content,
 			};
 
-			await axios.patch(`http://localhost:3000/blog/${id}`, updateData);
+			await axios.patch(`https://blood-aid-server-eight.vercel.app/blog/${id}`, updateData);
 			toast.success("Blog updated successfully!");
 			navigate("/dashboard/content-management");
 		} catch (err) {

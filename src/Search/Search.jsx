@@ -12,7 +12,7 @@ export default function SearchDonors() {
 	const [district, setDistrict] = useState("");
 	const [upazila, setUpazila] = useState("");
 	const [page, setPage] = useState(1);
-	const limit = 6;
+	const limit = 12;
 
 	useEffect(() => {
 		axios.get("/bd_districts_with_upazilas.json").then((res) => {
@@ -30,7 +30,7 @@ export default function SearchDonors() {
 		queryKey: ["users", bloodGroup, district, upazila, page],
 		queryFn: () =>
 			axios
-				.get("http://localhost:3000/SearchedUsers", {
+				.get("https://blood-aid-server-eight.vercel.app/SearchedUsers", {
 					params: { bloodGroup, district, upazila, page, limit },
 				})
 				.then((res) => res.data),
@@ -197,7 +197,7 @@ export default function SearchDonors() {
 
 				<button
 					onClick={() => {
-						const maxPage = Math.ceil(data?.total / limit);
+						const maxPage = Math.ceil(data?.totalPage / limit);
 						if (page < maxPage) setPage((p) => p + 1);
 					}}
 					disabled={page >= Math.ceil(data?.total / limit)}

@@ -28,7 +28,7 @@ export default function Profile() {
 
 		// 1️⃣ profile
 		axios
-			.get(`http://localhost:3000/users?email=${user.email}`)
+			.get(`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`)
 			.then(({ data }) => {
 				const profile = Array.isArray(data) ? data[0] : data; // handle array / obj
 				setDocId(profile._id); // keep _id separately
@@ -73,7 +73,7 @@ export default function Profile() {
 	const handleSave = async () => {
 		try {
 			await axios
-				.patch(`http://localhost:3000/updateUser/?email=${user.email}`, form)
+				.patch(`https://blood-aid-server-eight.vercel.app/updateUser/?email=${user.email}`, form)
 				.then(() => {
 					setEditing(false);
 					toast("Updated successfully!", {

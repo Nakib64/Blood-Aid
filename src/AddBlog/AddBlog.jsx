@@ -28,7 +28,7 @@ export default function EditBlog() {
 	const { data: blog, isLoading, isError } = useQuery({
 		queryKey: ["blog", id],
 		queryFn: async () => {
-			const { data } = await axios.get(`http://localhost:3000/blog/${id}`);
+			const { data } = await axios.get(`https://blood-aid-server-eight.vercel.app/blog/${id}`);
 			return data;
 		},
 		enabled: !!id,
@@ -66,7 +66,7 @@ export default function EditBlog() {
 				setUploading(false);
 			}
 
-			await axios.patch(`http://localhost:3000/blog/${id}`, {
+			await axios.patch(`https://blood-aid-server-eight.vercel.app/blog/${id}`, {
 				title: data.title,
 				thumbnail: imageUrl,
 				content,

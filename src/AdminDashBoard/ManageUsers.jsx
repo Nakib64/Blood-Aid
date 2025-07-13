@@ -51,7 +51,7 @@ export default function AllUsers() {
       if (user?.email) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/users?email=${user.email}`
+            `https://blood-aid-server-eight.vercel.app/users?email=${user.email}`
           );
           setRole(res.data.role);
         } catch (err) {
@@ -76,7 +76,7 @@ export default function AllUsers() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["users", statusFilter, currentPage, searchEmail],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:3000/totalUsers", {
+      const res = await axios.get("https://blood-aid-server-eight.vercel.app/totalUsers", {
         params: {
           page: currentPage,
           limit: pageSize,
@@ -93,7 +93,7 @@ export default function AllUsers() {
   // Mutation (update role/status)
   const mutation = useMutation({
     mutationFn: ({ userId, action }) =>
-      axios.patch(`http://localhost:3000/users/${userId}`, { action }),
+      axios.patch(`https://blood-aid-server-eight.vercel.app/users/${userId}`, { action }),
     onSuccess: () => {
       queryClient.invalidateQueries(["users"]);
     },
@@ -245,28 +245,55 @@ export default function AllUsers() {
 
       {/* Pagination */}
       <div className="flex justify-center mt-8">
-        <div className="flex gap-2 flex-wrap">
-          {[...Array(totalPages)].map((_, i) => {
-            const isActive = currentPage === i + 1;
-            return (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`relative overflow-hidden px-5 py-2 text-sm font-medium rounded-full border shadow-sm transition-all duration-300 ease-in-out ${
-                  isActive
-                    ? "bg-primary text-white border-primary scale-105"
-                    : "bg-base-100 text-base-content border-base-300 hover:scale-105 hover:bg-base-200"
-                }`}
-              >
-                <span className="relative z-10">{i + 1}</span>
-                {!isActive && (
-                  <span className="absolute inset-0 z-0 bg-primary opacity-0 hover:opacity-10 transition-opacity duration-300 rounded-full"></span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+  <div className="flex gap-2 flex-wrap items-center">
+    {/* Prev Button */}
+    <button
+      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+      className="px-4 py-2 text-sm font-medium border rounded-full shadow-sm disabled:opacity-40"
+    >
+      Prev
+    </button>
+
+    {/* Page Buttons */}
+    {[...Array(totalPages)].map((_, i) => i + 1)
+      .filter((page) => {
+        if (totalPages <= 5) return true;
+        if (currentPage <= 3) return page <= 5;
+        if (currentPage >= totalPages - 2) return page >= totalPages - 4;
+        return Math.abs(currentPage - page) <= 2;
+      })
+      .map((page) => {
+        const isActive = currentPage === page;
+        return (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`relative overflow-hidden px-4 py-2 text-sm font-medium rounded-full border shadow-sm transition-all duration-300 ease-in-out ${
+              isActive
+                ? "bg-primary text-white border-primary scale-105"
+                : "bg-base-100 text-base-content border-base-300 hover:scale-105 hover:bg-base-200"
+            }`}
+          >
+            <span className="relative z-10">{page}</span>
+            {!isActive && (
+              <span className="absolute inset-0 z-0 bg-primary opacity-0 hover:opacity-10 transition-opacity duration-300 rounded-full"></span>
+            )}
+          </button>
+        );
+      })}
+
+    {/* Next Button */}
+    <button
+      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+      disabled={currentPage === totalPages}
+      className="px-4 py-2 text-sm font-medium border rounded-full shadow-sm disabled:opacity-40"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
     </div>
   );
 }

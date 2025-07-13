@@ -17,7 +17,7 @@ export default function PendingDonationRequests() {
 	useEffect(() => {
 		setLoading(true);
 		axios
-			.get("http://localhost:3000/donationRequests", {
+			.get("https://blood-aid-server-eight.vercel.app/donationRequests", {
 				params: {
 					status: "pending",
 					page,
@@ -140,24 +140,63 @@ export default function PendingDonationRequests() {
 						</div>
 
 						{/* Pagination */}
-						<div className="flex justify-center mt-10 gap-2">
-							{[...Array(totalPages)].map((_, i) => (
-								<button
-									key={i}
-									onClick={() => setPage(i + 1)}
-									className={`w-9 h-9 rounded-full font-medium transition-all shadow-md border border-gray-300 ${
-										page === i + 1
-											? "bg-red-600 text-white"
-											: "bg-white text-gray-700 hover:bg-gray-100"
-									}`}
-								>
-									{i + 1}
-								</button>
-							))}
-						</div>
+						{/* Pagination */}
+{totalPages > 1 && (
+  <div className="flex justify-center mt-10 gap-2 items-center flex-wrap">
+    {/* Prev */}
+    <button
+      onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+      disabled={page === 1}
+      className="px-3 py-1.5 rounded-full text-sm font-medium border shadow-sm disabled:opacity-40 bg-white"
+    >
+      Prev
+    </button>
+
+    {/* Page numbers */}
+    {getVisiblePages(page, totalPages).map((p) => (
+      <button
+        key={p}
+        onClick={() => setPage(p)}
+        className={`w-9 h-9 rounded-full font-medium transition-all shadow-md border ${
+          page === p
+            ? "bg-red-600 text-white border-red-600"
+            : "bg-white text-gray-700 hover:bg-gray-100 border-gray-300"
+        }`}
+      >
+        {p}
+      </button>
+    ))}
+
+    {/* Next */}
+    <button
+      onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+      disabled={page === totalPages}
+      className="px-3 py-1.5 rounded-full text-sm font-medium border shadow-sm disabled:opacity-40 bg-white"
+    >
+      Next
+    </button>
+  </div>
+)}
+
 					</>
 				)}
 			</div>
 		</motion.div>
 	);
+}
+function getVisiblePages(currentPage, totalPages) {
+  const maxButtons = 5;
+  let start = Math.max(currentPage - Math.floor(maxButtons / 2), 1);
+  let end = start + maxButtons - 1;
+
+  if (end > totalPages) {
+    end = totalPages;
+    start = Math.max(end - maxButtons + 1, 1);
+  }
+
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
 }

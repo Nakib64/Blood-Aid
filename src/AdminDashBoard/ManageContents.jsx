@@ -20,7 +20,7 @@ export default function ContentManagement() {
 	// Get role of current user
 	useEffect(() => {
 		if (user?.email) {
-			axios.get(`http://localhost:3000/users?email=${user.email}`).then((res) => {
+			axios.get(`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`).then((res) => {
 				setUserRole(res.data.role);
 			});
 		}
@@ -29,7 +29,7 @@ export default function ContentManagement() {
 	const { data, isLoading } = useQuery({
 		queryKey: ["blogs", filter, page],
 		queryFn: async () => {
-			const res = await axios.get("http://localhost:3000/blogs", {
+			const res = await axios.get("https://blood-aid-server-eight.vercel.app/blogs", {
 				params: {
 					status: filter !== "all" ? filter : undefined,
 					page,
@@ -45,14 +45,14 @@ export default function ContentManagement() {
 
 	const mutation = useMutation({
 		mutationFn: ({ id, action }) =>
-			axios.patch(`http://localhost:3000/blogs/${id}`, { action }),
+			axios.patch(`https://blood-aid-server-eight.vercel.app/blogs/${id}`, { action }),
 		onSuccess: () => {
 			queryClient.invalidateQueries(["blogs"]);
 		},
 	});
 
 	const deleteMutation = useMutation({
-		mutationFn: (id) => axios.delete(`http://localhost:3000/blogs/${id}`),
+		mutationFn: (id) => axios.delete(`https://blood-aid-server-eight.vercel.app/blogs/${id}`),
 		onSuccess: () => {
 			toast.success("Blog deleted");
 			queryClient.invalidateQueries(["blogs"]);

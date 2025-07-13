@@ -6,7 +6,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUserRole = async (email) => {
-	const res = await axios.get(`http://localhost:3000/users?email=${email}`);
+	const res = await axios.get(`https://blood-aid-server-eight.vercel.app/users?email=${email}`);
 	return res.data.role;
 };
 

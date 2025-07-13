@@ -14,7 +14,7 @@ const RecentMyDonations = () => {
   useEffect(() => {
     if (!user?.email) return;
     axios
-      .get("http://localhost:3000/recent", {
+      .get("https://blood-aid-server-eight.vercel.app/recent", {
         params: {
           email: user.email,
           limit: 3,

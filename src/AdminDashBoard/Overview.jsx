@@ -7,17 +7,17 @@ import RecentUsers from "./RecentUsers";
 
 // ✅ Fetch functions
 const getTotalUsers = async () => {
-	const { data } = await axios.get("http://localhost:3000/users");
-	return data.length;
+	const { data } = await axios.get("https://blood-aid-server-eight.vercel.app/totalUser");
+	return data
 };
 
 const getTotalDonationRequests = async () => {
-	const { data } = await axios.get("http://localhost:3000/totalDonationRequests");
+	const { data } = await axios.get("https://blood-aid-server-eight.vercel.app/totalDonationRequests");
 	return data;
 };
 
 const getTotalFunding = async () => {
-	const { data } = await axios.get("http://localhost:3000/totalDonations");
+	const { data } = await axios.get("https://blood-aid-server-eight.vercel.app/totalDonations");
 	return data;
 };
 
@@ -87,7 +87,7 @@ function Card({ icon, color, value, label, prefix = "" }) {
 			</div>
 			<div>
 				<p className="text-4xl font-semibold text-gray-900">
-					<CountUp end={parseFloat(value) || 0} duration={2} />{" "}
+					<CountUp end={parseInt(value) || 0} duration={4} />{" "}
 				</p>
 				<p className="text-gray-500 text-sm tracking-widest uppercase font-medium mt-1">
 					{label}

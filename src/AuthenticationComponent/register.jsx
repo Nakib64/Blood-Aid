@@ -94,7 +94,7 @@ export default function RegistrationForm() {
 				})
 			)
 			.then(() => {
-				axios.post("http://localhost:3000/users", values).then(() => {
+				axios.post("https://blood-aid-server-eight.vercel.app/users", values).then(() => {
 					toast.success(
 						<span className="flex items-center gap-2">
 							<FiCheckCircle className="text-xl" />

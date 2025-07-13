@@ -17,7 +17,7 @@ export default function DonationRequestDetails() {
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:3000/donationRequest/${id}`)
+			.get(`https://blood-aid-server-eight.vercel.app/donationRequest/${id}`)
 			.then((res) => {
 				setRequest(res.data);
 				setLoading(false);
@@ -28,7 +28,7 @@ export default function DonationRequestDetails() {
 	const handleConfirmDonation = (request) => {
 		setConfirming(true);
 		axios
-			.patch(`http://localhost:3000/donationRequests/${id}`, {
+			.patch(`https://blood-aid-server-eight.vercel.app/donationRequests/${id}`, {
 				status: "inprogress",
 				donorName: user.displayName,
 				donorEmail: user.email,
@@ -37,8 +37,8 @@ export default function DonationRequestDetails() {
 
                 request.donorName =user.displayName
                 request.donorEmail = user.email
-				axios.post(`http://localhost:3000/myDonations`, request).then(() => {
-					navigate("/dashboard/myDonationRequests");
+				axios.post(`https://blood-aid-server-eight.vercel.app/myDonations`, request).then(() => {
+					navigate("/dashboard/myDonations");
                     	toast.success(
 					<span className="flex items-center gap-2">
 						<FiCheckCircle className="text-xl" />

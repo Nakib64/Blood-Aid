@@ -12,7 +12,7 @@ export default function MyDonations() {
 	useEffect(() => {
 	
 		axios
-			.get(`http://localhost:3000/myDonations?email=${user.email}`)
+			.get(`https://blood-aid-server-eight.vercel.app/myDonations?email=${user.email}`)
 			.then((res) => {
 				setDonations(res.data);
 				setLoading(false);

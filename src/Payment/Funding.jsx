@@ -1,18 +1,25 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import {
+	Elements,
+	useStripe,
+	useElements,
+	CardElement,
+} from "@stripe/react-stripe-js";
 import { motion } from "framer-motion";
 import { authContext } from "../Authentication/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Slide, toast } from "react-toastify";
 import { FiCheckCircle } from "react-icons/fi";
 
-const stripePromise = loadStripe("pk_test_51Rel8QPC60YcOyoh03aUYjVdPZT6ZrTCiiohKfNBkiZEAZuodvSWQVUHzYY1XyOtowJyUc0jBxMjNCYGvZus5mRS00CU3jgPAa");
+const stripePromise = loadStripe(
+	"pk_test_51Rel8QPC60YcOyoh03aUYjVdPZT6ZrTCiiohKfNBkiZEAZuodvSWQVUHzYY1XyOtowJyUc0jBxMjNCYGvZus5mRS00CU3jgPAa"
+);
 
 // 👇 fetcher for recent donations
 const fetchRecentDonations = async () => {
-	const { data } = await axios.get("http://localhost:3000/api/donation/all");
+	const { data } = await axios.get("https://blood-aid-server-eight.vercel.app/api/donation/all");
 	return data;
 };
 
@@ -23,17 +30,21 @@ function DonationForm() {
 	const { user } = useContext(authContext);
 	const queryClient = useQueryClient();
 
-	const [amount, setAmount] = useState(50);
+	const [amount, setAmount] = useState(100);
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		
 		setLoading(true);
 		try {
-			const { data } = await axios.post("http://localhost:3000/api/donation/create-intent", {
-				amount: amount * 100,
-			});
+			const { data } = await axios.post(
+				"https://blood-aid-server-eight.vercel.app/api/donation/create-intent",
+				{
+					amount: parseInt(amount * 100),
+				}
+			);
 
 			const result = await stripe.confirmCardPayment(data.clientSecret, {
 				payment_method: {
@@ -45,7 +56,7 @@ function DonationForm() {
 			if (result.error) {
 				setMessage(result.error.message);
 			} else if (result.paymentIntent.status === "succeeded") {
-				await axios.post("http://localhost:3000/api/donation/save", {
+				await axios.post("https://blood-aid-server-eight.vercel.app/api/donation/save", {
 					name: user.displayName,
 					email: user.email,
 					amount: amount * 100,
@@ -62,7 +73,7 @@ function DonationForm() {
 				// ✅ Refetch donations list
 				queryClient.invalidateQueries({ queryKey: ["donations"] });
 
-				setAmount(50);
+				setAmount(100);
 			}
 		} catch (err) {
 			setMessage("Something went wrong.");
@@ -71,7 +82,10 @@ function DonationForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 shadow rounded">
+		<form
+			onSubmit={handleSubmit}
+			className="space-y-4 bg-white p-6 shadow rounded"
+		>
 			<h2 className="text-xl font-semibold">Donate</h2>
 			<input
 				className="input input-bordered w-full"
@@ -98,7 +112,8 @@ function DonationForm() {
 			/>
 			<CardElement className="p-2 border rounded" />
 			<button className="btn btn-primary w-full" type="submit" disabled={loading}>
-				{loading && <span className="loading loading-spinner loading-md"></span>} Donate {amount} BDT
+				{loading && <span className="loading loading-spinner loading-md"></span>}{" "}
+				Donate {amount} BDT
 			</button>
 			{message && <p className="text-green-600">{message}</p>}
 		</form>
@@ -107,13 +122,18 @@ function DonationForm() {
 
 // 🧾 Recent Donations Table Component
 function RecentDonations() {
-	const { data: donations = [], isLoading, isError } = useQuery({
+	const {
+		data: donations = [],
+		isLoading,
+		isError,
+	} = useQuery({
 		queryKey: ["donations"],
 		queryFn: fetchRecentDonations,
 	});
 
 	if (isLoading) return <p className="text-center mt-6">Loading donations...</p>;
-	if (isError) return <p className="text-center text-red-500">Failed to load donations.</p>;
+	if (isError)
+		return <p className="text-center text-red-500">Failed to load donations.</p>;
 
 	return (
 		<div className="mt-8">
@@ -156,11 +176,21 @@ export default function FundingPage() {
 			>
 				🩸 Funding Page
 			</motion.h1>
-
+			<motion.h1
+				initial={{ opacity: 0, y: -10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5 }}
+				onClick={() => {
+					navigator.clipboard.writeText("4242 4242 4242 4242");
+					toast.success("Card number copied!");
+				}}
+				className="text-sm text-gray-400 italic font-bold text-center mb-10 cursor-pointer hover:text-red-600 transition"
+			>
+				testing card : [4242 4242 4242 4242]
+			</motion.h1>
 			<Elements stripe={stripePromise}>
 				<DonationForm />
 			</Elements>
-
 			<RecentDonations />
 		</div>
 	);

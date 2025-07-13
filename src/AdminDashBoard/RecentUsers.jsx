@@ -8,7 +8,7 @@ export default function RecentUsers() {
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["recentUsers"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:3000/recent-users"); // Adjust to your actual endpoint
+      const res = await axios.get("https://blood-aid-server-eight.vercel.app/recent-users"); // Adjust to your actual endpoint
       return res.data;
     },
   });

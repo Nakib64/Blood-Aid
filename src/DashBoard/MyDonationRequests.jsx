@@ -20,7 +20,7 @@ export default function MyDonationRequests() {
     if (!user?.email) return;
     setLoading(true);
     axios
-      .get(`http://localhost:3000/donationRequests`, {
+      .get(`https://blood-aid-server-eight.vercel.app/donationRequests`, {
         params: { email: user.email, status, page },
       })
       .then((res) => {
@@ -32,7 +32,7 @@ export default function MyDonationRequests() {
 
   const handleStatusUpdate = (id, newStatus) => {
     axios
-      .patch(`http://localhost:3000/donationRequests/${id}`, {
+      .patch(`https://blood-aid-server-eight.vercel.app/donationRequests/${id}`, {
         status: newStatus,
       })
       .then(() => {
@@ -160,21 +160,59 @@ export default function MyDonationRequests() {
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-wrap justify-center mt-6 gap-2">
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setPage(i + 1)}
-            className={`w-9 h-9 rounded-md font-medium transition-all shadow-md ${
-              page === i + 1
-                ? "bg-red-600 text-white"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+  <div className="flex justify-center mt-6 flex-wrap gap-2 items-center">
+    {/* Prev */}
+    <button
+      onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+      disabled={page === 1}
+      className="px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm bg-white disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    {/* Page Numbers */}
+    {getVisiblePages(page, totalPages).map(p => (
+      <button
+        key={p}
+        onClick={() => setPage(p)}
+        className={`w-9 h-9 rounded-md font-medium transition-all shadow border ${
+          page === p
+            ? "bg-red-600 text-white border-red-600"
+            : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+        }`}
+      >
+        {p}
+      </button>
+    ))}
+
+    {/* Next */}
+    <button
+      onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+      disabled={page === totalPages}
+      className="px-3 py-1.5 text-sm font-medium border rounded-md shadow-sm bg-white disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+)}
+
     </motion.div>
   );
+}
+function getVisiblePages(currentPage, totalPages) {
+  const maxButtons = 5;
+  let start = Math.max(currentPage - Math.floor(maxButtons / 2), 1);
+  let end = start + maxButtons - 1;
+
+  if (end > totalPages) {
+    end = totalPages;
+    start = Math.max(end - maxButtons + 1, 1);
+  }
+
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
 }

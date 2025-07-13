@@ -31,7 +31,9 @@ export function DashboardLayout() {
 		queryKey: ["user-role", user?.email],
 		queryFn: async () => {
 			if (!user?.email) return null;
-			const res = await axios.get(`http://localhost:3000/users?email=${user.email}`);
+			const res = await axios.get(
+				`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`
+			);
 			return res.data.role;
 		},
 		enabled: !!user?.email, // only run if user exists
@@ -44,25 +46,83 @@ export function DashboardLayout() {
 
 		if (role === "donor") {
 			setLinks([
-				{ to: "/dashboard", label: "Overview", icon: <LayoutDashboard size={18} /> },
-				{ to: "/dashboard/profile", label: "Profile", icon: <UserCircle size={18} /> },
-				{ to: "/dashboard/my-donation-requests", label: "My Donation Requests", icon: <Droplets size={18} /> },
-				{ to: "/dashboard/create-donation-request", label: "Create Request", icon: <PlusCircle size={18} /> },
-				{ to: "/dashboard/myDonations", label: "My Donations", icon: <DollarSign size={18} /> },
+				{
+					to: "/dashboard",
+					label: "Overview",
+					icon: <LayoutDashboard size={18} />,
+				},
+				{
+					to: "/dashboard/profile",
+					label: "Profile",
+					icon: <UserCircle size={18} />,
+				},
+				{
+					to: "/dashboard/my-donation-requests",
+					label: "My Donation Requests",
+					icon: <Droplets size={18} />,
+				},
+				{
+					to: "/dashboard/create-donation-request",
+					label: "Create Request",
+					icon: <PlusCircle size={18} />,
+				},
+				{
+					to: "/dashboard/myDonations",
+					label: "My Donations",
+					icon: <DollarSign size={18} />,
+				},
 			]);
-		} else if(role === "admin") {
+		} else if (role === "admin") {
 			setLinks([
-				{ to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
-				{ to: "/dashboard/all-users", label: "Manage Users", icon: <Users size={18} /> },
-				{ to: "/dashboard/all-blood-donation-request", label: "All Donation Requests", icon: <HeartPulse size={18} /> },
-				{ to: "/dashboard/content-management", label: "Manage Contents", icon: <SquareDashedKanban size={18} /> },
+				{
+					to: "/dashboard",
+					label: "Dashboard",
+					icon: <LayoutDashboard size={18} />,
+				},
+				{
+					to: "/dashboard/all-users",
+					label: "Manage Users",
+					icon: <Users size={18} />,
+				},
+				{
+					to: "/dashboard/all-blood-donation-request",
+					label: "All Donation Requests",
+					icon: <HeartPulse size={18} />,
+				},
+				{
+					to: "/dashboard/content-management",
+					label: "Manage Contents",
+					icon: <SquareDashedKanban size={18} />,
+				},
+				{
+					to: "/dashboard/myDonations",
+					label: "My Donations",
+					icon: <DollarSign size={18} />,
+				},
 			]);
-		}else{
+		} else {
 			setLinks([
-				{ to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
-		
-				{ to: "/dashboard/all-blood-donation-request", label: "All Donation Requests", icon: <HeartPulse size={18} /> },
-				{ to: "/dashboard/content-management", label: "Manage Contents", icon: <SquareDashedKanban size={18} /> },
+				{
+					to: "/dashboard",
+					label: "Dashboard",
+					icon: <LayoutDashboard size={18} />,
+				},
+
+				{
+					to: "/dashboard/all-blood-donation-request",
+					label: "All Donation Requests",
+					icon: <HeartPulse size={18} />,
+				},
+				{
+					to: "/dashboard/content-management",
+					label: "Manage Contents",
+					icon: <SquareDashedKanban size={18} />,
+				},
+				{
+					to: "/dashboard/myDonations",
+					label: "My Donations",
+					icon: <DollarSign size={18} />,
+				},
 			]);
 		}
 	}, [role]);

@@ -53,7 +53,7 @@ export default function CreateDonationRequest() {
     };
 
     console.log("Donation Request Submitted:", donationRequest);
-    axios.post('http://localhost:3000/createDonation', donationRequest).then(()=>{
+    axios.post('https://blood-aid-server-eight.vercel.app/createDonation', donationRequest).then(()=>{
       setLoading(false)
 toast.success("Donation request submitted!");
     navigate("/dashboard");

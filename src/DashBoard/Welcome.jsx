@@ -9,7 +9,7 @@ import AdminDashboard from "../AdminDashBoard/Overview";
 import RecentMyDonations from "./Recent";
 
 const fetchUserRole = async (email) => {
-  const { data } = await axios.get(`http://localhost:3000/users?email=${email}`);
+  const { data } = await axios.get(`https://blood-aid-server-eight.vercel.app/users?email=${email}`);
   return data.role;
 };
 
