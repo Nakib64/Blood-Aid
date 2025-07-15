@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 
-export default function EditBlog() {
-	const { id } = useParams();
+export default function AddBlog() {
+
 	const navigate = useNavigate();
 	const editor = useRef(null);
 
@@ -25,19 +25,7 @@ export default function EditBlog() {
 	} = useForm();
 
 	// ✅ Fetch blog data using React Query
-	const { data: blog, isLoading, isError } = useQuery({
-		queryKey: ["blog", id],
-		queryFn: async () => {
-			const { data } = await axios.get(`https://blood-aid-server-eight.vercel.app/blog/${id}`);
-			return data;
-		},
-		enabled: !!id,
-		onSuccess: (blog) => {
-			setValue("title", blog.title);
-			setContent(blog.content);
-			setPreview(blog.thumbnail);
-		},
-	});
+	
 
 	// 🖼️ Thumbnail preview
 	const handleImagePreview = (e) => {
@@ -66,23 +54,22 @@ export default function EditBlog() {
 				setUploading(false);
 			}
 
-			await axios.patch(`https://blood-aid-server-eight.vercel.app/blog/${id}`, {
+			await axios.post(`https://blood-aid-server-eight.vercel.app/blogs`, {
 				title: data.title,
 				thumbnail: imageUrl,
 				content,
 			});
 
-			toast.success("Blog updated successfully!");
+			toast.success("Blog upload successfully!");
 			navigate("/dashboard/content-management");
 		} catch (error) {
-			toast.error("Failed to update blog");
+			toast.error("Failed to upload blog");
+			console.log(error);
 		} finally {
 			setSubmitting(false);
 		}
 	};
 
-	if (isLoading) return <p className="text-center py-10">Loading blog data...</p>;
-	if (isError) return <p className="text-center text-red-500">Failed to load blog.</p>;
 
 	return (
 		<div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">

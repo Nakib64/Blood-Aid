@@ -11,7 +11,7 @@ import UseAxios from "../Hooks/UseAxios";
 import Loading from "../Loading/Loading";
 
 export default function ContentManagement() {
-	const [filter, setFilter] = useState("");
+	const [filter, setFilter] = useState();
 	const [page, setPage] = useState(1);
 	const limit = 6;
 	const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function ContentManagement() {
 		queryFn: async () => {
 			const res = await axios.get("https://blood-aid-server-eight.vercel.app/blogs", {
 				params: {
-					status: filter !== "all" ? filter : undefined,
+					status: filter ,
 					page,
 					limit,
 				},
@@ -52,12 +52,13 @@ export default function ContentManagement() {
 	const totalPages = data?.totalPages || 1;
 
 	const mutation = useMutation({
-		mutationFn: ({ id, action }) =>
-			axios.patch(`https://blood-aid-server-eight.vercel.app/blogs/${id}`, { action }),
-		onSuccess: () => {
-			toast.success("Blog deleted");
+		mutationFn: async({ id, action }) =>
+		 await	axios.patch(`https://blood-aid-server-eight.vercel.app/blogs/${id}`, { action }).then(()=>{
+			toast.success('sucess')
+			
 			queryClient.invalidateQueries(["blogs"]);
-		},
+		 })
+		
 	});
 
 	const deleteMutation = useMutation({
@@ -114,7 +115,7 @@ export default function ContentManagement() {
 						}}
 						className="select select-bordered text-sm"
 					>
-						<option value="all">All Blogs</option>
+						<option value={''} >All Blogs</option>
 						<option value="draft">Draft</option>
 						<option value="published">Published</option>
 					</select>
