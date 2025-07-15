@@ -33,7 +33,7 @@ export default function AllDonationRequests() {
   const handleStatusUpdate = (id, newStatus) => {
     axios
       .patch(`https://blood-aid-server-eight.vercel.app/donationRequests/${id}`, {
-        status: newStatus,
+        status: newStaatus,
       })
       .then(() => {
         setRequests((prev) =>

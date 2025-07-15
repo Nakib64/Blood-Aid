@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { authContext } from "../Authentication/AuthContext";
 import {
@@ -17,7 +17,8 @@ import {
 import logo from "../assets/pngegg.png";
 import { ToastContainer } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
+import UseAxios from "../Hooks/UseAxios";
 
 export function DashboardLayout() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,20 +27,21 @@ export function DashboardLayout() {
 	const [links, setLinks] = useState([]);
 	const navigate = useNavigate();
 
+	const useAxios = UseAxios()
+
 	// Fetch user role using React Query
 	const { data: role } = useQuery({
 		queryKey: ["user-role", user?.email],
 		queryFn: async () => {
-			if (!user?.email) return null;
-			const res = await axios.get(
-				`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`
+			const res = await useAxios.get(
+				`/users?email=${user?.email}`
 			);
 			return res.data.role;
 		},
-		enabled: !!user?.email, // only run if user exists
-		refetchInterval: 5000, // refetch role every 5 seconds to auto-update if changed
-		refetchOnWindowFocus: true, // optional: refetch on tab focus
+		enabled: !!user?.email, 
 	});
+
+
 
 	useEffect(() => {
 		if (!role) return;

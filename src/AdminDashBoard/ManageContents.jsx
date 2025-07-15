@@ -2,31 +2,35 @@ import React, { useState, useContext, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { Slide, toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { Pencil, Trash2, UploadCloud, CloudOff } from "lucide-react";
 import Swal from "sweetalert2";
 import { authContext } from "../Authentication/AuthContext";
+import UseAxios from "../Hooks/UseAxios";
+import Loading from "../Loading/Loading";
 
 export default function ContentManagement() {
-	const [filter, setFilter] = useState("all");
-	const [userRole, setUserRole] = useState(null);
+	const [filter, setFilter] = useState("");
 	const [page, setPage] = useState(1);
 	const limit = 6;
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const { user } = useContext(authContext);
-
+	const axiosSecure = UseAxios()
+	
 	// Get role of current user
-	useEffect(() => {
-		if (user?.email) {
-			axios.get(`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`).then((res) => {
-				setUserRole(res.data.role);
-			});
+	
+	const {data: role, isLoading} = useQuery({
+		queryKey: [user],
+		queryFn: async()=>{
+			const res = await axiosSecure.get(`/users?email=${user?.email}`)
+			console.log(res?.data?.role);
+			return res.data.role
 		}
-	}, [user]);
+	})
 
-	const { data, isLoading } = useQuery({
+	const { data , refetch} = useQuery({
 		queryKey: ["blogs", filter, page],
 		queryFn: async () => {
 			const res = await axios.get("https://blood-aid-server-eight.vercel.app/blogs", {
@@ -40,6 +44,10 @@ export default function ContentManagement() {
 		},
 	});
 
+	if(role === "donor"){
+		navigate('/')
+	}
+
 	const blogs = data?.blog || [];
 	const totalPages = data?.totalPages || 1;
 
@@ -47,6 +55,7 @@ export default function ContentManagement() {
 		mutationFn: ({ id, action }) =>
 			axios.patch(`https://blood-aid-server-eight.vercel.app/blogs/${id}`, { action }),
 		onSuccess: () => {
+			toast.success("Blog deleted");
 			queryClient.invalidateQueries(["blogs"]);
 		},
 	});
@@ -87,6 +96,10 @@ export default function ContentManagement() {
 		});
 	};
 
+	if(isLoading){
+		return <Loading></Loading>
+	}
+
 	return (
 		<div className="p-6">
 			{/* Header */}
@@ -105,7 +118,7 @@ export default function ContentManagement() {
 						<option value="draft">Draft</option>
 						<option value="published">Published</option>
 					</select>
-					{userRole === "admin" && (
+					{role === "admin" && (
 						<button
 							onClick={() => navigate("/dashboard/content-management/add-blog")}
 							className="btn btn-primary btn-sm"
@@ -117,7 +130,7 @@ export default function ContentManagement() {
 			</div>
 
 			{/* Blog Grid */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6">
 				{isLoading ? (
 					<p className="text-center col-span-full">Loading blogs...</p>
 				) : blogs.length === 0 ? (
@@ -158,7 +171,7 @@ export default function ContentManagement() {
 
 								{/* Action Buttons */}
 								<div className="p-4 flex flex-wrap justify-between items-center gap-2">
-									{(userRole === "admin" || userRole === "volunteer") && (
+									{(role === "admin" || role === "volunteer") && (
 										<Link to={`/dashboard/blog/${blog._id}`}>
 											<button className="btn btn-sm btn-outline hover:btn-info transition-all">
 											edit	
@@ -166,8 +179,8 @@ export default function ContentManagement() {
 										</Link>
 									)}
 
-									{userRole === "admin" && (
-										<>
+									{role === "admin" && (
+										<div className="flex gap-4 lg:gap-8">
 											{blog.status === "draft" ? (
 												<button
 													onClick={() => handleAction(blog._id, "publish")}
@@ -190,7 +203,7 @@ export default function ContentManagement() {
 											>
 												<Trash2 size={14} /> Delete
 											</button>
-										</>
+										</div>
 									)}
 								</div>
 							</div>

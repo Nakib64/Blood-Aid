@@ -2,18 +2,16 @@ import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router";
 import { authContext } from "../Authentication/AuthContext";
 import Loading from "../Loading/Loading";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 
-const fetchUserRole = async (email) => {
-	const res = await axios.get(`https://blood-aid-server-eight.vercel.app/users?email=${email}`);
-	return res.data.role;
-};
+import { useQuery } from "@tanstack/react-query";
+import UseAxios from "../Hooks/UseAxios";
+
+
 
 const AdminRoute = ({ children }) => {
 	const { user, loading } = useContext(authContext);
 	const location = useLocation();
-
+	const axiosSecure = UseAxios()
 	const {
 		data: role,
 		isLoading: roleLoading,
@@ -21,7 +19,10 @@ const AdminRoute = ({ children }) => {
 	} = useQuery({
 		queryKey: ["userRole", user?.email],
 		enabled: !!user?.email, // only run query if email exists
-		queryFn: () => fetchUserRole(user.email),
+		queryFn: async() => {
+			const res = await axiosSecure.get(`/users?email=${user.email}`);
+	return res.data.role;
+		}
 	});
 
 	if (loading || roleLoading) return <Loading />;

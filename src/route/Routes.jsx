@@ -26,6 +26,7 @@ import PublishedBlogs from "../Blogs/Blogs";
 import EditBlog from "../AddBlog/EditBlog";
 import FundingPage from "../Payment/Funding";
 import Payment from "../Payment/Payment";
+import NotFoundPage from "../Error/Error";
 
 
 const Routes = createBrowserRouter([
@@ -138,7 +139,11 @@ const Routes = createBrowserRouter([
     {
         path: "forbidden",
         Component: Forbidden
-    }
+    },
+	{
+		path: "*",
+		Component: NotFoundPage
+	}
 ]);
 
 export default Routes;
