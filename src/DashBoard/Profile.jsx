@@ -2,9 +2,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiEdit2, FiSave, FiUpload } from "react-icons/fi";
-import axios from "axios";
 import { authContext } from "../Authentication/AuthContext";
 import { Bounce, toast } from "react-toastify";
+import UseAxios from "../Hooks/UseAxios";
+import axios from "axios";
 
 export default function Profile() {
 	/* -------------------- local state -------------------- */
@@ -13,6 +14,7 @@ export default function Profile() {
 	const [districts, setDistricts] = useState([]);
 	const [upazilas, setUpazilas] = useState([]);
 	const [editing, setEditing] = useState(false);
+	const axiosSecure = UseAxios()
 	const [form, setForm] = useState({
 		name: "",
 		email: "",
@@ -27,8 +29,8 @@ export default function Profile() {
 		if (!user?.email) return;
 
 		// 1️⃣ profile
-		axios
-			.get(`https://blood-aid-server-eight.vercel.app/users?email=${user.email}`)
+		axiosSecure
+			.get(`/users?email=${user.email}`)
 			.then(({ data }) => {
 				const profile = Array.isArray(data) ? data[0] : data; // handle array / obj
 				setDocId(profile._id); // keep _id separately
@@ -73,7 +75,7 @@ export default function Profile() {
 	const handleSave = async () => {
 		try {
 			await axios
-				.patch(`https://blood-aid-server-eight.vercel.app/updateUser/?email=${user.email}`, form)
+				.patch(`https://blood-aid-server-eight.vercel.app/updateUser?email=${user.email}`, form)
 				.then(() => {
 					setEditing(false);
 					toast("Updated successfully!", {

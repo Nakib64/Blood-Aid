@@ -11,7 +11,7 @@ export default function DonorCard() {
     const{ id} = useParams()
   useEffect(() => {
     axios
-      .get(`https://blood-aid-server-eight.vercel.app/users?id=${id}`)
+      .get(`https://blood-aid-server-eight.vercel.app/donors?id=${id}`)
       .then((res) => setDonor(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));

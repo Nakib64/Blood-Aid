@@ -30,7 +30,7 @@ export default function ContentManagement() {
 		}
 	})
 
-	const { data , refetch} = useQuery({
+	const { data } = useQuery({
 		queryKey: ["blogs", filter, page],
 		queryFn: async () => {
 			const res = await axios.get("https://blood-aid-server-eight.vercel.app/blogs", {
@@ -54,9 +54,14 @@ export default function ContentManagement() {
 	const mutation = useMutation({
 		mutationFn: async({ id, action }) =>
 		 await	axios.patch(`https://blood-aid-server-eight.vercel.app/blogs/${id}`, { action }).then(()=>{
-			toast.success('sucess')
-			
 			queryClient.invalidateQueries(["blogs"]);
+
+			if(action === 'unpublish'){
+							toast.success('Added to draft!')
+			}
+			else{
+							toast.success('Published!')
+			}
 		 })
 		
 	});

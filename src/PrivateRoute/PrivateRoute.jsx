@@ -11,9 +11,9 @@ const PrivateRoute = ({ children }) => {
 
 	const { user, loading } = useContext(authContext);
 	const location = useLocation();
-    console.log(location.pathname);
+	console.log(location.pathname);
 
-	const { data: donor , isLoading} = useQuery({
+	const { data: donor, isLoading } = useQuery({
 		queryKey: [user],
 		queryFn: async () => {
 			const res = await axiosSecure.get(`/users?email=${user?.email}`);
@@ -21,17 +21,23 @@ const PrivateRoute = ({ children }) => {
 		},
 	});
 
-
-	if (loading ||isLoading) {
+	if (loading ) {
 		return <Loading></Loading>;
 	}
-	if (donor) {
-		return <>{children}</>;
+	
+
+	if (!user) {
+		return (
+			<Navigate state={location.pathname} to={"/authentication/login"}></Navigate>
+		);
 	}
 
-	return (
-		<Navigate state={location.pathname} to={"/authentication/login"}></Navigate>
-	);
+    if (isLoading ) {
+		return <Loading></Loading>;
+	}
+    if (donor) {
+		return <>{children}</>;
+	}
 };
 
 export default PrivateRoute;
