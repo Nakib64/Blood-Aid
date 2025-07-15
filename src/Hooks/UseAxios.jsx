@@ -19,7 +19,7 @@ const UseAxios = () => {
     })
 
     return axiosInstance; 
-    }
+    } 
   
 }
 
