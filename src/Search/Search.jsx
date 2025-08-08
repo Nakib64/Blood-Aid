@@ -12,7 +12,7 @@ export default function SearchDonors() {
 	const [district, setDistrict] = useState("");
 	const [upazila, setUpazila] = useState("");
 	const [page, setPage] = useState(1);
-	const limit = 12;
+	const limit = 9;
 
 	useEffect(() => {
 		axios.get("/bd_districts_with_upazilas.json").then((res) => {
@@ -45,7 +45,7 @@ export default function SearchDonors() {
 		>
 			{/* Form */}
 			<div className="  p-8 space-y-6 max-w-7xl mx-auto">
-				<h2 className="text-3xl font-bold text-red-700 text-center">
+				<h2 className="text-3xl font-bold text-white text-center">
 					🔍 Search Blood Donors
 				</h2>
 
