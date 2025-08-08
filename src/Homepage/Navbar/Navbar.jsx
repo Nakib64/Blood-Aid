@@ -26,7 +26,7 @@ const Navbar = () => {
 	const NavLink = ({ to, label }) => (
 		<Link
 			to={to}
-			className={`relative text-center px-3 py-2 rounded-md font-medium transition duration-200 ease-in-out hover:bg-red-700 hover:text-white ${
+			className={`relative text-center md:px-3 py-2 rounded-md font-medium transition duration-200 ease-in-out hover:bg-red-700 hover:text-white ${
 				location.pathname === to ? "bg-red-900 text-white" : "text-white"
 			}`}
 		>
@@ -50,7 +50,7 @@ const Navbar = () => {
 			className="bg-red-800 text-white shadow sticky top-0 z-50"
 		>
 			<div className="w-full mx-auto px-4 py-1 flex items-center justify-between">
-				<Link to="/" className="text-2xl font-bold flex items-center gap-2">
+				<Link to="/" className="text-sm md:text-2xl font-bold flex items-center md:gap-2">
 					<img src={logo} alt="logo" className="h-12 w-12" />
 					<span className="hover:text-red-300 transition-colors duration-300">
 						BloodAid
@@ -84,7 +84,7 @@ const Navbar = () => {
 							</Tooltip.Root>
 						</Tooltip.Provider>
 					) : (
-						<div className="flex gap-4">
+						<div className="flex gap-2">
 							<NavLink to="/authentication/login" label="Login" />
 							<NavLink to="/authentication/register" label="Register" />
 						</div>
