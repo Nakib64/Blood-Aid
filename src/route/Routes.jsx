@@ -27,6 +27,7 @@ import EditBlog from "../AddBlog/EditBlog";
 import FundingPage from "../Payment/Funding";
 import Payment from "../Payment/Payment";
 import NotFoundPage from "../Error/Error";
+import About from "../about/About";
 
 
 const Routes = createBrowserRouter([
@@ -37,6 +38,10 @@ const Routes = createBrowserRouter([
 			{
 				index: true,
 				Component: Home,
+			},
+			{
+				path: '/about',
+				Component:About
 			},
 			{
 				path: "/donationRequests",

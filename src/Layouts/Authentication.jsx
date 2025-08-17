@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 const Authentication = () => {
     return (
-        <div>
+        <div className='bg-white'>
               <ToastContainer
         position="top-center"
         theme="colored"

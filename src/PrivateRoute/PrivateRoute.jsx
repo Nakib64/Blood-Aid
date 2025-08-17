@@ -10,8 +10,7 @@ const PrivateRoute = ({ children }) => {
 	const axiosSecure = UseAxios();
 
 	const { user, loading } = useContext(authContext);
-	const location = useLocation();
-	console.log(location.pathname);
+	const location = useLocation()
 
 	const { data: donor, isLoading } = useQuery({
 		queryKey: [user],

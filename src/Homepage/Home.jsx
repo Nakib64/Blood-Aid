@@ -21,6 +21,8 @@ import Events from "../components/Events";
 import FAQ from "./Faq";
 import Stats from "./Stats";
 import VolunteerCTA from "./Volunteer";
+import HomeDonation from "./HomeDonationRequesiton/HomeDonation";
+import HomeDonors from "./HomeDonor/HomeDonor";
 
 const fadeUp = {
 	hidden: { opacity: 0, y: 40 },
@@ -95,7 +97,7 @@ export default function Home() {
 
 	return (
 		<div
-			className="min-h-screen flex flex-col bg-white text-gray-800"
+			className="min-h-screen flex flex-col space-y-10"
 			data-theme="light"
 		>
 			{/* Banner */}
@@ -105,20 +107,28 @@ export default function Home() {
 					<h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
 						Be the Lifeline: <br className="hidden md:block" /> Donate Blood Today
 					</h1>
-					<div className="flex justify-center">
+					<div className="flex justify-center flex-col md:flex-row gap-6">
 						<Link
 							to="/searchDonor"
 							className="bg-gradient-to-r from-red-500 to-red-700 text-white px-8 py-4 text-lg rounded-full font-semibold shadow-lg hover:scale-105 transition transform"
 						>
 							🔍 Search Donors
 						</Link>
+						<Link
+							to="/donationRequests"
+							className="bg-gradient-to-r from-red-500 to-red-700 text-white px-8 py-4 text-lg rounded-full font-semibold shadow-lg hover:scale-105 transition transform"
+						>
+							Donation Requests
+						</Link>
 					</div>
 				</div>
 			</section>
 
+			<HomeDonation></HomeDonation>
+			<HomeDonors></HomeDonors>
 			{/* Featured Section */}
 			<motion.section
-				className="py-20 bg-gray-50 max-w-7xl mx-auto"
+				className="py-20  max-w-7xl mx-auto"
 				variants={fadeUp}
 				initial="hidden"
 				whileInView="visible"

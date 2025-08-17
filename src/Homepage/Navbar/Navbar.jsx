@@ -8,20 +8,10 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 
 const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
-	// const [, setDropdownOpen] = useState(false);
-	// const dropdownRef = useRef();
+
 	const { user } = useContext(authContext);
 	const location = useLocation();
 
-	// useEffect(() => {
-	// 	function handleClickOutside(e) {
-	// 		if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-	// 			setDropdownOpen(false);
-	// 		}
-	// 	}
-	// 	document.addEventListener("mousedown", handleClickOutside);
-	// 	return () => document.removeEventListener("mousedown", handleClickOutside);
-	// }, []);
 
 	const NavLink = ({ to, label }) => (
 		<Link
@@ -38,6 +28,7 @@ const Navbar = () => {
 		<div className="flex flex-col md:flex-row gap-2 md:gap-6 w-full">
 			<NavLink to="/donationRequests" label="Donation Requests" />
 			<NavLink to="/blogs" label="Blog" />
+			<NavLink to="/about" label="About" />
 			{user && <NavLink to="/funding" label="Funding" />}
 		</div>
 	);

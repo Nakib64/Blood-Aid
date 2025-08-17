@@ -25,7 +25,6 @@ export default function ContentManagement() {
 		queryKey: [user],
 		queryFn: async()=>{
 			const res = await axiosSecure.get(`/users?email=${user?.email}`)
-			console.log(res?.data?.role);
 			return res.data.role
 		}
 	})

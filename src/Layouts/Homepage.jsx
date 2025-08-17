@@ -7,7 +7,7 @@ import ScrollToTopButton from "../Homepage/Scroll/Scroll";
 
 const Homepage = () => {
 	return (
-		<div className="min-h-screen flex flex-col">
+		<div className="min-h-screen flex flex-col ">
 			<div>
 				<ScrollToTopButton></ScrollToTopButton>
 			</div>

@@ -15,7 +15,6 @@ export default function BlogPage() {
 			const res = await axios.get("https://blood-aid-server-eight.vercel.app/blogs", {
 				params: { status: "published", page, limit },
 			});
-      console.log(res.data);
 			return res.data;
 		},
 	});

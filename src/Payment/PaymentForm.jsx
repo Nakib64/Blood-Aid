@@ -28,7 +28,7 @@ const PaymentForm = () => {
          
 		} else {
             setError('')
-			console.log("payment method", paymentMethod);
+		
 		}
 	};
 
