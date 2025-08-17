@@ -42,7 +42,7 @@ export default function HowItWorks() {
 
 	return (
 		<motion.section
-			className="py-20 bg-gray-50 max-w-7xl mx-auto text-center"
+			className="py-20 -50 max-w-7xl mx-auto text-center"
 			variants={fadeUp}
 			initial="hidden"
 			whileInView="visible"

@@ -137,7 +137,7 @@ export default function DonationRequestDetails() {
 									type="text"
 									value={user.displayName}
 									disabled
-									className="w-full border px-3 py-2 rounded-md bg-gray-100 focus:outline-none focus:ring-0 border-none"
+									className="w-full border px-3 py-2 rounded-md -100 focus:outline-none focus:ring-0 border-none"
 								/>
 							</div>
 							<div>
@@ -146,13 +146,13 @@ export default function DonationRequestDetails() {
 									type="email"
 									value={user.email}
 									disabled
-									className="w-full border px-3 py-2 rounded-md bg-gray-100 focus:outline-none focus:ring-0 border-none"
+									className="w-full border px-3 py-2 rounded-md -100 focus:outline-none focus:ring-0 border-none"
 								/>
 							</div>
 							<div className="flex justify-end gap-2 mt-4">
 								<button
 									onClick={() => setModalOpen(false)}
-									className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+									className="px-4 py-2 -300 rounded-md hover:-400"
 								>
 									Cancel
 								</button>

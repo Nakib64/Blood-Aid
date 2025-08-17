@@ -71,12 +71,12 @@ toast.success("Donation request submitted!");
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex flex-col">
           <label className="font-medium mb-1">Requester Name</label>
-          <input type="text" value={user.displayName} disabled className="input bg-gray-100" />
+          <input type="text" value={user.displayName} disabled className="input -100" />
         </div>
 
         <div className="flex flex-col">
           <label className="font-medium mb-1">Requester Email</label>
-          <input type="email" value={user.email} disabled className="input bg-gray-100" />
+          <input type="email" value={user.email} disabled className="input -100" />
         </div>
 
         <div className="flex flex-col">

@@ -160,7 +160,7 @@ export default function PendingDonationRequests() {
         className={`w-9 h-9 rounded-full font-medium transition-all shadow-md border ${
           page === p
             ? "bg-red-600 text-white border-red-600"
-            : "bg-white text-gray-700 hover:bg-gray-100 border-gray-300"
+            : "bg-white text-gray-700 hover:-100 border-gray-300"
         }`}
       >
         {p}

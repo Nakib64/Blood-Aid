@@ -63,7 +63,7 @@ const RecentMyDonations = () => {
             {requests.map((req) => (
               <tr
                 key={req._id}
-                className="even:bg-gray-50 hover:bg-red-50 transition"
+                className="even:-50 hover:bg-red-50 transition"
               >
                 <td className="py-3 px-4 font-medium">{req.recipientName}</td>
                 <td className="py-3 px-4">

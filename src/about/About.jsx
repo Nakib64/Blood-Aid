@@ -7,7 +7,7 @@ const About = () => {
 
   const { user } = useContext(authContext);
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center px-6 py-12 md:px-20">
+    <div className="min-h-screen -50 flex flex-col items-center px-6 py-12 md:px-20">
       {/* Header Section */}
       <motion.h1
         initial={{ opacity: 0, y: -40 }}

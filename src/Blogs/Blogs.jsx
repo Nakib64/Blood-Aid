@@ -68,7 +68,7 @@ export default function BlogPage() {
 				<button
 					disabled={page === 1}
 					onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-					className="btn btn-sm bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full px-3"
+					className="btn btn-sm -100 hover:-200 text-gray-600 rounded-full px-3"
 				>
 					<ChevronLeft size={18} />
 				</button>
@@ -80,7 +80,7 @@ export default function BlogPage() {
 						className={`btn btn-sm rounded-full w-8 h-8 text-sm ${
 							page === i + 1
 								? "bg-red-600 text-white"
-								: "bg-gray-100 hover:bg-gray-200 text-gray-700"
+								: "-100 hover:-200 text-gray-700"
 						}`}
 					>
 						{i + 1}
@@ -90,7 +90,7 @@ export default function BlogPage() {
 				<button
 					disabled={page === totalPages}
 					onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-					className="btn btn-sm bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full px-3"
+					className="btn btn-sm -100 hover:-200 text-gray-600 rounded-full px-3"
 				>
 					<ChevronRight size={18} />
 				</button>

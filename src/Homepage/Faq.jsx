@@ -49,7 +49,7 @@ export default function FAQ() {
 
 	return (
 		<motion.section
-			className="py-20 bg-gray-50 max-w-7xl container mx-auto px-6"
+			className="py-20 -50 max-w-7xl container mx-auto px-6"
 			variants={fadeUp}
 			initial="hidden"
 			whileInView="visible"

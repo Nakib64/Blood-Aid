@@ -56,7 +56,7 @@ export default function AllDonationRequests() {
         <button
           onClick={() => setStatus("")}
           className={`px-4 py-2 rounded-full shadow-md transition-all ${
-            status === "" ? "bg-red-600 text-white" : " hover:bg-gray-300"
+            status === "" ? "bg-red-600 text-white" : " hover:-300"
           }`}
         >
           All
@@ -66,7 +66,7 @@ export default function AllDonationRequests() {
             key={s}
             onClick={() => setStatus(s)}
             className={`capitalize px-4 py-2 rounded-full shadow-md transition-all ${
-              status === s ? "bg-red-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+              status === s ? "bg-red-600 text-white" : "-200 hover:-300"
             }`}
           >
             {s}
@@ -178,7 +178,7 @@ export default function AllDonationRequests() {
         className={`w-9 h-9 rounded-md font-medium transition-all shadow border ${
           page === p
             ? "bg-red-600 text-white border-red-600"
-            : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+            : "bg-white text-gray-800 border-gray-300 hover:-100"
         }`}
       >
         {p}

@@ -24,6 +24,7 @@ import VolunteerCTA from "./Volunteer";
 import HomeDonation from "./HomeDonationRequesiton/HomeDonation";
 import HomeDonors from "./HomeDonor/HomeDonor";
 import Contact from "../Contact/Contact";
+import Heros from "./Heros/Heros";
 
 const fadeUp = {
 	hidden: { opacity: 0, y: 40 },
@@ -66,36 +67,6 @@ export default function Home() {
 		window.addEventListener("keydown", handleKey);
 		return () => window.removeEventListener("keydown", handleKey);
 	}, []);
-	const donors = [
-		{
-			name: "Nafiz ",
-			group: "O+",
-			img: "https://i.ibb.co/2Y3sqbt3/profile-1.jpg",
-			quote:
-				"Donating blood gives me purpose. It’s a small act with a massive impact.",
-		},
-		{
-			name: "Farhan Ahmed",
-			group: "A-",
-			img: "https://i.ibb.co/s91DSJJr/charlie-green-3-Jmf-ENc-L24-M-unsplash-1.jpg",
-			quote:
-				"I feel honored knowing my blood might save someone’s mother or child.",
-		},
-		{
-			name: "Hasan Kabir",
-			group: "B+",
-			img: "https://i.ibb.co/F4nq0bkn/ana-nichita-BI91-Nrpp-E38-unsplash-1.jpg",
-			quote:
-				"BloodAid makes it so easy to connect and help instantly when needed.",
-		},
-		{
-			name: "Farhan Ahmed",
-			group: "A-",
-			img: "https://i.ibb.co/s91DSJJr/charlie-green-3-Jmf-ENc-L24-M-unsplash-1.jpg",
-			quote:
-				"I feel honored knowing my blood might save someone’s mother or child.",
-		},
-	];
 
 	return (
 		<div className="min-h-screen flex flex-col space-y-10" data-theme="light">
@@ -258,74 +229,8 @@ export default function Home() {
 				</div>
 			</motion.section>
 
-			{/* Volunteers Section */}
-			<section className="max-w-7xl mx-auto p-8 bg-gradient-to-tr from-red-50 to-white rounded-3xl shadow-2xl relative select-none">
-				<h2 className="text-4xl font-bold mb-10 text-red-700 text-center">
-					Meet Our Heroes
-				</h2>
-
-				<div className="relative flex items-center">
-					{/* Left arrow */}
-					<button
-						onClick={prevSlide}
-						aria-label="Previous"
-						className="absolute left-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
-					>
-						<FiArrowLeft size={24} />
-					</button>
-
-					{/* Slide content */}
-					<div className="overflow-hidden w-full px-16">
-						<AnimatePresence initial={false} mode="wait">
-							<motion.div
-								key={index}
-								initial={{ x: 300, opacity: 0 }}
-								animate={{ x: 0, opacity: 1 }}
-								exit={{ x: -300, opacity: 0 }}
-								transition={{ duration: 0.5 }}
-								className="bg-white rounded-2xl p-8 shadow-xl min-h-[260px] flex flex-col items-center text-center"
-							>
-								<img
-									src={donors[index].img}
-									alt={donors[index].name}
-									className="w-24 h-24 rounded-full border-4 border-red-500 object-cover mb-4"
-									draggable={false}
-								/>
-								<h3 className="text-2xl font-semibold text-red-700 mb-1">
-									{donors[index].name}
-								</h3>
-								<span className="text-sm text-gray-500 mb-4">
-									Blood Group: {donors[index].group}
-								</span>
-								<p className="text-gray-600 italic max-w-xl">{`“${donors[index].quote}”`}</p>
-							</motion.div>
-						</AnimatePresence>
-					</div>
-
-					{/* Right arrow */}
-					<button
-						onClick={nextSlide}
-						aria-label="Next"
-						className="absolute right-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
-					>
-						<FiArrowRight size={24} />
-					</button>
-				</div>
-
-				{/* Dots */}
-				<div className="flex justify-center gap-3 mt-8">
-					{donors.map((_, i) => (
-						<button
-							key={i}
-							onClick={() => setIndex(i)}
-							aria-label={`Go to slide ${i + 1}`}
-							className={`w-4 h-4 rounded-full transition ${
-								i === index ? "bg-red-700" : "bg-red-300 hover:bg-red-500"
-							}`}
-						/>
-					))}
-				</div>
-			</section>
+			{/* heros */}
+			<Heros></Heros>
 
 			{/* how it works */}
 			<HowItWorks></HowItWorks>
@@ -333,8 +238,7 @@ export default function Home() {
 			<Events></Events>
 			{/* faq */}
 			<FAQ></FAQ>
-			{/* stats */}
-			<Stats></Stats>
+			
 			{/* voluteer ctr */}
 			<VolunteerCTA></VolunteerCTA>
 

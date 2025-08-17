@@ -29,7 +29,7 @@ const getRoleTag = (role) => {
     case "admin":
       return <span className={`${base} bg-purple-100 text-purple-600`}><Crown size={14} /> Admin</span>;
     default:
-      return <span className={`${base} bg-gray-100 text-gray-600`}><User size={14} /> {role}</span>;
+      return <span className={`${base} -100 text-gray-600`}><User size={14} /> {role}</span>;
   }
 };
 

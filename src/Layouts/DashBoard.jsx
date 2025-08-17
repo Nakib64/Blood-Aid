@@ -130,7 +130,7 @@ export function DashboardLayout() {
 	}, [role]);
 
 	return (
-		<div className="flex min-h-screen bg-gray-100">
+		<div className="flex min-h-screen -100">
 			{/* Sidebar */}
 			<aside
 				className={`${
@@ -189,7 +189,7 @@ export function DashboardLayout() {
 			</button>
 
 			{/* Main content */}
-			<main className="flex-1 pt-20 md:ml-10 p-6 transition-all bg-gray-50 min-h-screen w-7/10 lg:w-2/10">
+			<main className="flex-1 pt-20 md:ml-10 p-6 transition-all -50 min-h-screen w-7/10 lg:w-2/10">
 				<ToastContainer
 					position="top-center"
 					theme="colored"

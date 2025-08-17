@@ -165,7 +165,7 @@ export default function Profile() {
 							type="email"
 							value={form.email}
 							disabled
-							className="input bg-gray-100"
+							className="input -100"
 						/>
 					</div>
 
