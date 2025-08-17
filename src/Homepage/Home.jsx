@@ -12,7 +12,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, EffectCoverflow , Autoplay } from "swiper/modules";
+import { Pagination, EffectCoverflow, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import { useEffect, useState } from "react";
@@ -23,6 +23,7 @@ import Stats from "./Stats";
 import VolunteerCTA from "./Volunteer";
 import HomeDonation from "./HomeDonationRequesiton/HomeDonation";
 import HomeDonors from "./HomeDonor/HomeDonor";
+import Contact from "../Contact/Contact";
 
 const fadeUp = {
 	hidden: { opacity: 0, y: 40 },
@@ -47,24 +48,25 @@ const fadeRight = {
 };
 
 export default function Home() {
- const [index, setIndex] = useState(0);
+	const [index, setIndex] = useState(0);
 
-  const prevSlide = () => {
-    setIndex((i) => (i === 0 ? donors.length - 1 : i - 1));
-  };
-  const nextSlide = () => {
-    setIndex((i) => (i === donors.length - 1 ? 0 : i + 1));
-  };
+	const prevSlide = () => {
+		setIndex((i) => (i === 0 ? donors.length - 1 : i - 1));
+	};
+	const nextSlide = () => {
+		setIndex((i) => (i === donors.length - 1 ? 0 : i + 1));
+	};
 
-  // Optional: Keyboard nav
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "ArrowLeft") prevSlide();
-      if (e.key === "ArrowRight") nextSlide();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, []);	const donors = [
+	// Optional: Keyboard nav
+	useEffect(() => {
+		const handleKey = (e) => {
+			if (e.key === "ArrowLeft") prevSlide();
+			if (e.key === "ArrowRight") nextSlide();
+		};
+		window.addEventListener("keydown", handleKey);
+		return () => window.removeEventListener("keydown", handleKey);
+	}, []);
+	const donors = [
 		{
 			name: "Nafiz ",
 			group: "O+",
@@ -86,7 +88,7 @@ export default function Home() {
 			quote:
 				"BloodAid makes it so easy to connect and help instantly when needed.",
 		},
-			{
+		{
 			name: "Farhan Ahmed",
 			group: "A-",
 			img: "https://i.ibb.co/s91DSJJr/charlie-green-3-Jmf-ENc-L24-M-unsplash-1.jpg",
@@ -96,10 +98,7 @@ export default function Home() {
 	];
 
 	return (
-		<div
-			className="min-h-screen flex flex-col space-y-10"
-			data-theme="light"
-		>
+		<div className="min-h-screen flex flex-col space-y-10" data-theme="light">
 			{/* Banner */}
 			<section className="bg-[url('https://i.ibb.co/cKnzxYZz/adrian-sulyok-s-ZO8-ILz-GKcg-unsplash-1.jpg')] bg-cover bg-center text-white py-40 text-center relative">
 				<div className="absolute inset-0 bg-black/60"></div>
@@ -260,128 +259,87 @@ export default function Home() {
 			</motion.section>
 
 			{/* Volunteers Section */}
-		  <section className="max-w-7xl mx-auto p-8 bg-gradient-to-tr from-red-50 to-white rounded-3xl shadow-2xl relative select-none">
-      <h2 className="text-4xl font-bold mb-10 text-red-700 text-center">
-        Meet Our Heroes
-      </h2>
+			<section className="max-w-7xl mx-auto p-8 bg-gradient-to-tr from-red-50 to-white rounded-3xl shadow-2xl relative select-none">
+				<h2 className="text-4xl font-bold mb-10 text-red-700 text-center">
+					Meet Our Heroes
+				</h2>
 
-      <div className="relative flex items-center">
-        {/* Left arrow */}
-        <button
-          onClick={prevSlide}
-          aria-label="Previous"
-          className="absolute left-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
-        >
-          <FiArrowLeft size={24} />
-        </button>
+				<div className="relative flex items-center">
+					{/* Left arrow */}
+					<button
+						onClick={prevSlide}
+						aria-label="Previous"
+						className="absolute left-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
+					>
+						<FiArrowLeft size={24} />
+					</button>
 
-        {/* Slide content */}
-        <div className="overflow-hidden w-full px-16">
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div
-              key={index}
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -300, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl p-8 shadow-xl min-h-[260px] flex flex-col items-center text-center"
-            >
-              <img
-                src={donors[index].img}
-                alt={donors[index].name}
-                className="w-24 h-24 rounded-full border-4 border-red-500 object-cover mb-4"
-                draggable={false}
-              />
-              <h3 className="text-2xl font-semibold text-red-700 mb-1">
-                {donors[index].name}
-              </h3>
-              <span className="text-sm text-gray-500 mb-4">
-                Blood Group: {donors[index].group}
-              </span>
-              <p className="text-gray-600 italic max-w-xl">{`“${donors[index].quote}”`}</p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Right arrow */}
-        <button
-          onClick={nextSlide}
-          aria-label="Next"
-          className="absolute right-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
-        >
-          <FiArrowRight size={24} />
-        </button>
-      </div>
-
-      {/* Dots */}
-      <div className="flex justify-center gap-3 mt-8">
-        {donors.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`w-4 h-4 rounded-full transition ${
-              i === index ? "bg-red-700" : "bg-red-300 hover:bg-red-500"
-            }`}
-          />
-        ))}
-      </div>
-    </section>
-  
-
-
-
-		  {/* how it works */}
-		  <HowItWorks></HowItWorks>
-		  {/* events */}
-		  <Events></Events>
-		  {/* faq */}
-		  <FAQ></FAQ>
-		  {/* stats */}
-		  <Stats></Stats>
-		  {/* voluteer ctr */}
-		  <VolunteerCTA></VolunteerCTA>
-
-
-			{/* Contact Us */}
-			{/* Contact Us */}
-			<motion.section
-				className="py-20 bg-gray-50 max-w-7xl mx-auto my-20"
-				variants={fadeUp}
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true }}
-			>
-				<div className="container mx-auto px-4">
-					<h2 className="text-3xl font-bold text-center text-red-700 mb-10">
-						Contact Us
-					</h2>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-12 justify-center">
-						<motion.form className="space-y-4" variants={fadeUp}>
-							<input type="text" placeholder="Your Name" className="input" />
-							<input type="email" placeholder="Your Email" className="input" />
-							<textarea placeholder="Your Message" className="input h-32"></textarea>
-							<button
-								type="submit"
-								className="bg-red-600 text-white px-6 py-3 rounded hover:bg-red-700 transition"
+					{/* Slide content */}
+					<div className="overflow-hidden w-full px-16">
+						<AnimatePresence initial={false} mode="wait">
+							<motion.div
+								key={index}
+								initial={{ x: 300, opacity: 0 }}
+								animate={{ x: 0, opacity: 1 }}
+								exit={{ x: -300, opacity: 0 }}
+								transition={{ duration: 0.5 }}
+								className="bg-white rounded-2xl p-8 shadow-xl min-h-[260px] flex flex-col items-center text-center"
 							>
-								Send Message
-							</button>
-						</motion.form>
-						<motion.div className="text-lg space-y-4" variants={fadeUp}>
-							<p>
-								<strong>Phone:</strong> +880 1315168075
-							</p>
-							<p>
-								<strong>Email:</strong> nafiz2282@gmail.com
-							</p>
-							<p>
-								<strong>Address:</strong> Dhaka, Bangladesh
-							</p>
-						</motion.div>
+								<img
+									src={donors[index].img}
+									alt={donors[index].name}
+									className="w-24 h-24 rounded-full border-4 border-red-500 object-cover mb-4"
+									draggable={false}
+								/>
+								<h3 className="text-2xl font-semibold text-red-700 mb-1">
+									{donors[index].name}
+								</h3>
+								<span className="text-sm text-gray-500 mb-4">
+									Blood Group: {donors[index].group}
+								</span>
+								<p className="text-gray-600 italic max-w-xl">{`“${donors[index].quote}”`}</p>
+							</motion.div>
+						</AnimatePresence>
 					</div>
+
+					{/* Right arrow */}
+					<button
+						onClick={nextSlide}
+						aria-label="Next"
+						className="absolute right-0 z-20 bg-red-600 hover:bg-red-700 text-white rounded-full p-3 shadow-md transition"
+					>
+						<FiArrowRight size={24} />
+					</button>
 				</div>
-			</motion.section>
+
+				{/* Dots */}
+				<div className="flex justify-center gap-3 mt-8">
+					{donors.map((_, i) => (
+						<button
+							key={i}
+							onClick={() => setIndex(i)}
+							aria-label={`Go to slide ${i + 1}`}
+							className={`w-4 h-4 rounded-full transition ${
+								i === index ? "bg-red-700" : "bg-red-300 hover:bg-red-500"
+							}`}
+						/>
+					))}
+				</div>
+			</section>
+
+			{/* how it works */}
+			<HowItWorks></HowItWorks>
+			{/* events */}
+			<Events></Events>
+			{/* faq */}
+			<FAQ></FAQ>
+			{/* stats */}
+			<Stats></Stats>
+			{/* voluteer ctr */}
+			<VolunteerCTA></VolunteerCTA>
+
+			{/* Contact Us */}
+			<Contact></Contact>
 		</div>
 	);
 }

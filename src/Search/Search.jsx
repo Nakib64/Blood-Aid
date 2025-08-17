@@ -41,7 +41,7 @@ export default function SearchDonors() {
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			className="w-full mx-auto px-4 py-10 min-h-screen bg-[url('https://i.ibb.co/zWj10frv/nguy-n-hi-p-ma-Ye-Ml3x-Cr-Y-unsplash.jpg')] bg-cover bg-no-repeat"
+			className="w-full mx-auto px-4 py-10 min-h-screen"
 		>
 			{/* Form */}
 			<div className="  p-8 space-y-6 max-w-7xl mx-auto">
