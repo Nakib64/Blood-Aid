@@ -137,7 +137,7 @@ export default function RegistrationForm() {
 	/* ───────────────────────── JSX ───────────────────────── */
 	return (
 		<div
-			className="min-h-screen bg-[url('https://i.ibb.co/7JySbmCy/nguy-n-hi-p-2r-NHli-X6-XHk-unsplash.jpg')] bg-cover flex items-center justify-center px-4"
+			className="min-h-screen bg-[url('https://i.ibb.co.com/PGPLMy45/nguy-n-hi-p-2r-NHli-X6-XHk-unsplash-1-1.jpg')] bg-cover flex items-center justify-center px-4"
 			data-theme="light"
 		>
 			<motion.form

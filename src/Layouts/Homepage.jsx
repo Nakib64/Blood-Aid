@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "../Homepage/Navbar/Navbar";
 import Footer from "../Homepage/Footer/Footer";
 import ScrollToTopButton from "../Homepage/Scroll/Scroll";
+import { Toaster } from "@/components/components/ui/sonner";
 
 const Homepage = () => {
 	return (
@@ -18,7 +19,9 @@ const Homepage = () => {
 				newestOnTop
 				pauseOnFocusLoss={false}
 			/>
+			<Toaster richColors/>
 			<Navbar></Navbar>
+
 			<main className="flex-1">
 				<Outlet></Outlet>
 			</main>

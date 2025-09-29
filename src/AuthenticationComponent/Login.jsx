@@ -51,7 +51,8 @@ export default function LoginPage() {
 
 	return (
 		<div
-			className="min-h-screen flex items-center justify-center px-8 bg-[url('https://i.ibb.co/zWj10frv/nguy-n-hi-p-ma-Ye-Ml3x-Cr-Y-unsplash.jpg')] bg-cover bg-no-repeat "
+			className="min-h-screen flex items-center justify-center px-8 
+			bg-[url('https://i.ibb.co.com/1fmH1JhL/nguy-n-hi-p-ma-Ye-Ml3x-Cr-Y-unsplash-1.jpg')] bg-cover bg-no-repeat "
 			data-theme="light"
 		>
 			<div className="bg-transparent backdrop-blur-lg shadow-lg rounded-2xl p-8 w-full max-w-4xl flex flex-col md:flex-row gap-8">

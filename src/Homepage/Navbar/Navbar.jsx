@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import axios from "axios";
 
 const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);

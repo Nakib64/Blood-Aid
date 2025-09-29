@@ -71,7 +71,7 @@ export default function Home() {
 	return (
 		<div className="min-h-screen flex flex-col space-y-10" data-theme="light">
 			{/* Banner */}
-			<section className="bg-[url('https://i.ibb.co/cKnzxYZz/adrian-sulyok-s-ZO8-ILz-GKcg-unsplash-1.jpg')] bg-cover bg-center text-white py-40 text-center relative">
+			<section className="bg-[url('https://i.ibb.co.com/3w2n3cP/adrian-sulyok-s-ZO8-ILz-GKcg-unsplash-1-1.jpg')] bg-cover bg-center text-white py-40 text-center relative">
 				<div className="absolute inset-0 bg-black/60"></div>
 				<div className="relative z-10 p-6 max-w-4xl mx-auto">
 					<h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">

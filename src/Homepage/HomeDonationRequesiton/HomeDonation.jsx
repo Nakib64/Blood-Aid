@@ -25,10 +25,7 @@ export default function HomeDonation() {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+    <div
       className="mx-auto w-full"
     >
       <div className="max-w-7xl mx-auto pt-20 px-4">
@@ -45,10 +42,8 @@ export default function HomeDonation() {
             No pending donation requests found.
           </p>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
+          <div
+            
             className="overflow-x-auto shadow-xl rounded-xl border border-gray-200"
           >
             <table className="min-w-full border-collapse bg-white rounded-xl">
@@ -64,7 +59,7 @@ export default function HomeDonation() {
               </thead>
               <tbody>
                 {requests.map((req, index) => (
-                  <motion.tr
+                  <tr
                     key={req._id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -90,13 +85,13 @@ export default function HomeDonation() {
                         View
                       </Link>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))}
               </tbody>
             </table>
-          </motion.div>
+          </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

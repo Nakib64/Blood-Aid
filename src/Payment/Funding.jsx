@@ -10,8 +10,8 @@ import {
 import { motion } from "framer-motion";
 import { authContext } from "../Authentication/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Slide, toast } from "react-toastify";
 import { FiCheckCircle } from "react-icons/fi";
+import { toast } from "sonner";
 
 const stripePromise = loadStripe(
 	"pk_test_51Rel8QPC60YcOyoh03aUYjVdPZT6ZrTCiiohKfNBkiZEAZuodvSWQVUHzYY1XyOtowJyUc0jBxMjNCYGvZus5mRS00CU3jgPAa"
@@ -19,7 +19,9 @@ const stripePromise = loadStripe(
 
 // 👇 fetcher for recent donations
 const fetchRecentDonations = async () => {
-	const { data } = await axios.get("https://blood-aid-server-eight.vercel.app/api/donation/all");
+	const { data } = await axios.get(
+		"https://blood-aid-server-eight.vercel.app/api/donation/all"
+	);
 	return data;
 };
 
@@ -36,7 +38,7 @@ function DonationForm() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+		const date = new Date();
 		setLoading(true);
 		try {
 			const { data } = await axios.post(
@@ -56,27 +58,28 @@ function DonationForm() {
 			if (result.error) {
 				setMessage(result.error.message);
 			} else if (result.paymentIntent.status === "succeeded") {
-				await axios.post("https://blood-aid-server-eight.vercel.app/api/donation/save", {
-					name: user.displayName,
-					email: user.email,
-					amount: amount * 100,
-				});
-
-				toast.success(
-					<span className="flex items-center gap-2">
-						<FiCheckCircle className="text-xl" />
-						Donation Successful! 🎉
-					</span>,
-					{ transition: Slide, closeButton: false, hideProgressBar: false }
+				await axios.post(
+					"https://blood-aid-server-eight.vercel.app/api/donation/save",
+					{
+						name: user.displayName,
+						email: user.email,
+						amount: amount * 100,
+						date,
+					}
 				);
-
 				// ✅ Refetch donations list
 				queryClient.invalidateQueries({ queryKey: ["donations"] });
+				toast.success("Thanks a lot for your support!", {
+            description: new Date().toLocaleDateString(),
+           
+          })
 
 				setAmount(100);
+				setMessage(null);
 			}
 		} catch (err) {
 			setMessage("Something went wrong.");
+				toast.success("Something went wrong.")
 		}
 		setLoading(false);
 	};
